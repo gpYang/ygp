@@ -4,13 +4,13 @@
  * 单例类
  * 
  * @author yangguipeng<hi121073215@gmail.com>
- * @package System
+ * @package Library
  */
 
-namespace System;
+namespace Library;
 
 /**
- * @package System
+ * @package Library
  */
 class Singleton {
 

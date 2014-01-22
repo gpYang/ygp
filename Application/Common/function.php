@@ -31,7 +31,7 @@ function config($config = null, $value = null) {
  */
 function thrower($string) {
     @ob_clean();
-    throw new \System\Thrower($string);
+    throw new \Library\Thrower($string);
 }
 
 /**
@@ -288,7 +288,7 @@ function url($url, $query = '') {
 function singleton($name = '', $object = null) {
     static $class = null;
     if (null === $class) {
-        $class = new \System\Singleton();
+        $class = new \Library\Singleton();
     }
     switch (func_num_args()) {
         case 0 :

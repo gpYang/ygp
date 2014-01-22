@@ -102,7 +102,7 @@ class Db {
      * @param string $writer 主库名
      * @param string $reader 从库名
      */
-    function __construct($writer, $reader) {
+    public function __construct($writer, $reader) {
         if (empty(static::$_dbConfigs)) {
             static::$_dbConfigs = config('db');
         }

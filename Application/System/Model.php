@@ -37,7 +37,7 @@ abstract class Model {
      * @param string $writer 主库
      * @param string $reader 从库
      */
-    function __construct($writer = 'writer', $reader = 'reader') {
+    public function __construct($writer = 'writer', $reader = 'reader') {
         $this->db = new Db($writer, $reader);
     }
 

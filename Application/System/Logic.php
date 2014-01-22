@@ -17,6 +17,20 @@ use System\Controller;
 abstract class Logic {
 
     /**
+     * @var object 事件管理器
+     */
+    protected $event = null;
+
+    /**
+     * 构造方法,保存事务管理器
+     * 
+     * @param \System\Event $event
+     */
+    public function __construct(\System\Event $event) {
+        $this->event = $event;
+    }
+
+    /**
      * 加载逻辑类(通过path获取其他模块逻辑)
      * 
      * @param string $path 逻辑路径
@@ -42,7 +56,7 @@ abstract class Logic {
      * 通过url设置路径
      */
     private function setPath($path) {
-        $routeMatch = singleton('System-Router')->getRoute();
+        $routeMatch = $this->event->getRouter()->getRouteMatch();
         if ($path === '') {
             $path = array($routeMatch['module'], $routeMatch['controller']);
         } else {

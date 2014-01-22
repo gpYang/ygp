@@ -4,15 +4,15 @@
  * 异常抛出类
  * 
  * @author yangguipeng<hi121073215@gmail.com>
- * @package System
+ * @package Library
  */
 
-namespace System;
+namespace Library;
 
 use \Exception;
 
 /**
- * @package System
+ * @package Library
  */
 class Thrower extends Exception {
 

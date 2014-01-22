@@ -2,12 +2,9 @@
 
 /**
  * 总主导文件
- *
- * @author yangguipeng
- *  2013/06/06
- * @copyright Copyright (c) 2011-2013年 深圳市房多多网络科技有限公司. (http://www.fangdd.com)
+ * 
+ * @author yangguipeng<hi121073215@gmail.com>
  */
-
 define('PATH_ROOT', dirname(__DIR__));
 
 define('PATH_PUBLIC', PATH_ROOT . '/Public');

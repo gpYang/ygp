@@ -17,7 +17,7 @@ class Router {
     /**
      * @var array 路由
      */
-    private $_routeMatch = array(
+    protected $routeMatch = array(
         'module' => '',
         'controller' => '',
         'action' => '',
@@ -38,7 +38,12 @@ class Router {
      */
     private $_ruleMatch = array();
 
-    function __construct($config) {
+    /**
+     * 构造方法,添加路由规则
+     * 
+     * @param type $config
+     */
+    public function __construct($config) {
         if (isset($config['route_rule']) && is_array($config)) {
             foreach ($config['route_rule'] as $value) {
                 call_user_method_array('addRule', $this, $value);
@@ -55,7 +60,7 @@ class Router {
         if (empty($route)) {
             $route = implode('/', $defaultRoute);
         }
-        $this->_routeMatch = $this->parseRoute($route);
+        return ($this->routeMatch = $this->parseRoute($route));
     }
 
     /**
@@ -100,7 +105,7 @@ class Router {
         $defaultRoute = array_values(config('route'));
         false !== strpos($route, '?') && $route = trim(substr($route, 0, strpos($route, '?')), '/');
         $breakRoute = $this->parseRouteByConfig($this->_ruleMatch, explode('/', $route));
-        $routeMatch = array_keys($this->_routeMatch);
+        $routeMatch = array_keys($this->routeMatch);
         $result = array();
         for ($i = 0; $i <= 2; $i++) {
             $result[$routeMatch[$i]] = isset($breakRoute[$i]) ? $breakRoute[$i] : $defaultRoute[$i];
@@ -144,15 +149,15 @@ class Router {
      */
     public function match($class) {
         if (false !== $class) {
-            if (strpos($this->_routeMatch['action'], '-')) {
-                $exAction = explode('-', $this->_routeMatch['action']);
-                $this->_routeMatch['action'] = $exAction[0];
+            if (strpos($this->routeMatch['action'], '-')) {
+                $exAction = explode('-', $this->routeMatch['action']);
+                $this->routeMatch['action'] = $exAction[0];
                 unset($exAction[0]);
                 foreach ($exAction as $value) {
-                    $this->_routeMatch['action'] .= ucfirst($value);
+                    $this->routeMatch['action'] .= ucfirst($value);
                 }
             }
-            if (!method_exists($class, $this->_routeMatch['action'] . 'Action')) {
+            if (!method_exists($class, $this->routeMatch['action'] . 'Action')) {
                 $this->notFound();
             }
         }
@@ -172,8 +177,8 @@ class Router {
      * 
      * @return array
      */
-    public function getRoute() {
-        return $this->_routeMatch;
+    public function getRouteMatch() {
+        return $this->routeMatch;
     }
 
     /**

@@ -46,7 +46,7 @@ class View {
      * @param string $common 公共模块
      * @param array $data 数据
      */
-    function __construct($path, $common, $data) {
+    public function __construct($path, $common, $data) {
         if (empty(static::$_helper)) {
             static::$_helper = config('helper');
         }
@@ -77,9 +77,6 @@ class View {
      */
     public function setRealPath($path) {
         if ($this->_common === false) {
-            if (false === singleton('System-Router')->isRoute($path)) {
-                thrower('没有找到对应视图文件');
-            }
             $path = explode('/', $path);
             $this->_realPath = $this->_rootPath . '/' . ucfirst($path[0]) . '/View/' . ucfirst($path[1]) . '/' . ucfirst($path[2]) . HTML_EXT;
         } else {

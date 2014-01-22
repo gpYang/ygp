@@ -30,6 +30,11 @@ abstract class Controller {
      * @var boolean 是否清除通过事件管理器加载的试图
      */
     protected $cleanView = false;
+    
+    /**
+     * @var object 事件管理器
+     */
+    protected $event = null;
 
     /**
      * @var array 逻辑数据
@@ -40,6 +45,15 @@ abstract class Controller {
      * @var array 模型数据
      */
     public static $modelData = array();
+    
+    /**
+     * 构造方法,保存事务管理器
+     * 
+     * @param \System\Event $event
+     */
+    public function __construct(\System\Event $event) {
+        $this->event = $event;
+    }
 
     /**
      * 加载逻辑类(通过path获取其他模块逻辑)
@@ -73,7 +87,7 @@ abstract class Controller {
      */
     public function view($data = null, $path = '', $common = '', $isEvent = false) {
         if ($path === '') {
-            $path = implode('/', singleton('System-Router')->getRoute());
+            $path = implode('/', $this->event->getRouter()->getRouteMatch());
         }
         if (true === $isEvent) {
             $this->eventView[] = $common . $path;
@@ -102,7 +116,7 @@ abstract class Controller {
      * @return string
      */
     private function setPath($path) {
-        $routeMatch = singleton('System-Router')->getRoute();
+        $routeMatch = $this->event->getRouter()->getRouteMatch();
         if ($path === '') {
             $path = array($routeMatch['module'], $routeMatch['controller']);
         } else {
@@ -133,7 +147,7 @@ abstract class Controller {
                 thrower(sprintf('无法找到对应%s文件'), $block === 'Logic' ? '逻辑' : '模型');
             }
             include $realPath;
-            self::${$dataName}[$name] = new $realName();
+            self::${$dataName}[$name] = new $realName($this->event);
         }
         return self::${$dataName}[$name];
     }
@@ -165,6 +179,15 @@ abstract class Controller {
      */
     public function cleanView() {
         $this->cleanView = true;
+    }
+    
+    /**
+     * 获取事务管理器
+     * 
+     * @return object
+     */
+    public function getEvent() {
+        return $this->event;
     }
 
 }

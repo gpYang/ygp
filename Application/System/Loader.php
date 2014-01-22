@@ -38,7 +38,7 @@ class Loader {
      * 
      * @param array $loader 加载文件
      */
-    function __construct($loader) {
+    public function __construct($loader) {
         $this->factory($loader);
     }
 

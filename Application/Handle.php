@@ -12,7 +12,8 @@ if (PHP_VERSION < '5.3') {
 include PATH_APPLICATION . '/System/Loader' . PHP_EXT;
 include PATH_APPLICATION . '/Common/function' . PHP_EXT;
 
-singleton('System-Loader', new System\Loader(array('System\Router', 'System\Request', 'System\Event', 'System\Config')));
+$systemObjects = array();
+$systemObjects['loader'] = new System\Loader(array('System\Router', 'System\Request', 'System\Event', 'System\Config'));
 
 $config = System\Config::init(include PATH_APPLICATION . '/Common/Config/config' . PHP_EXT);
 
@@ -27,9 +28,9 @@ if ($config['debug']['on']) {
 define('HTML_EXT', isset($config['ext']['html']) ? $config['ext']['html'] : '.phtml');
 define('LOG_EXT', isset($config['ext']['log']) ? $config['ext']['log'] : '.log');
 
-singleton('System-Request', new System\Request(System\Config::getConfigFromFile('request')));
-singleton('System-Router', new System\Router($config));
+$systemObjects['request'] = new System\Request(System\Config::getConfigFromFile('request'));
+$systemObjects['router'] = new System\Router($config);
 
-$event = singleton('System-Event', new System\Event());
+$event = new System\Event($systemObjects);
 $event->setEvents(System\Config::getConfigFromFile('events'));
 return $event;

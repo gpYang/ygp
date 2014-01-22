@@ -33,7 +33,7 @@ abstract class DbDriver {
      * 
      * @param type $config
      */
-    function __construct($config) {
+    public function __construct($config) {
         $this->port = $config['port'];
         $this->hostname = $config['hostname'];
         $this->username = $config['username'];
