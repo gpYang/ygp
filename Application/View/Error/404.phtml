@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBliC "-//W3C//dtD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/dtD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <head>
+        <style>
+            body {font: 400 24px 宋体,tahoma,arial;}
+            #main {width:250px;height:90px;position:absolute}
+            .font {width:110px;float: left;padding-top:50px;height: 109px}
+        </style>
+    </head>
+    <body>
+        <div id="main">
+            <div><label class="font">惨遭404!!你想去哪?</label><image src="<?php echo config('host_url') . '/Image/404.jpg' ?>"></image></div>
+        </div>
+    </body>
+    <script>
+    window.onload = function () { 
+        var divId = document.getElementById("main");
+        var b_height = document.body.clientHeight || window.innerHeight;
+        var b_width = document.body.clientWidth || window.innerWidth;
+        var v_left=(b_width-divId.clientWidth)/2;
+        var v_top=(b_height-divId.clientHeight)/2;
+        divId.style.left=v_left + 'px';
+        divId.style.top=v_top + 'px';
+    };
+    </script>
+</html>

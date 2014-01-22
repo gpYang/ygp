@@ -1,0 +1,16 @@
+<div>
+    <ul>
+        <?php foreach ($this->scan as $value) { ?>
+            <?php if (!in_array($value, array('.', '..'))) { ?>
+                <?php $path = $this->top . '/' . $value; ?>
+                <li><a href="<?php
+        if (is_dir($path)) {
+            echo url('scan/index/dir', array('top' => $path));
+        } else {
+            echo url('scan/index/file', array('file' => $path));
+        }
+                ?>"><?php echo $value ?></a>
+                   <?php } ?>
+               <?php } ?>
+    </ul>
+</div>

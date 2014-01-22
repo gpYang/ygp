@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBliC "-//W3C//dtD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/dtD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <head>
+        <style>
+            h2 {margin: 0;text-align: center;}
+            h3 {margin: 0}
+            body {font: 400 14px 宋体,tahoma,arial;}
+        </style>
+    </head>
+    <body>
+        <div id="main" style="margin: 0 auto;position:absolute">
+            <div style="margin: 0 auto; width: 18%"><image src="<?php echo config('host_url') . '/Image/thrower.jpg' ?>"></image></div>
+            <div>
+                <h2>啊~出错了</h2>
+            </div>
+            <hr />
+            <div>
+                <h3>--错误文件--</h3>
+                <label style="margin-left: 20px; ">错误发生在 <?php echo $this->getFile() ?> 第<?php echo $this->getLine() ?>行</label></br>
+                <h3>--错误信息--</h3>
+                <label style="margin-left: 20px; "><?php echo $this->getMessage() ?></label></br>
+            </div>
+            <hr />
+            <div>
+                <h3>--程序的一生--</h3>
+                <?php
+                foreach ($this->string as $key => $value) {
+                    preg_match('/\d (.*)/', $value, $matches);
+                    echo '<label style="margin-left: 20px; ">' . $key . ' ' . end($matches) . '</label></br>';
+                }
+                echo '<label style="margin-left: 20px; ">' . count($this->string) . ' The End!</label></br>';
+                ?>
+            </div>
+        </div>
+    </body>
+    <script>
+//        var $ = ready = window.ready = function(fn) {
+//            if (document.addEventListener) {//兼容非IE  
+//                document.addEventListener("DOMContentLoaded", function() {
+//                    //注销事件，避免反复触发  
+//                    document.removeEventListener("DOMContentLoaded", arguments.callee, false);
+//                    fn();//调用参数函数  
+//                }, false);
+//            } else if (document.attachEvent) {//兼容IE  
+//                document.attachEvent("onreadystatechange", function() {
+//                    if (document.readyState === "complete") {
+//                        document.detachEvent("onreadystatechange", arguments.callee);
+//                        fn();
+//                    }
+//                });
+//            }
+//        }
+        window.onload = function() {
+            var divId = document.getElementById("main");
+            var b_height = document.body.clientHeight || window.innerHeight;
+            var b_width = document.body.clientWidth || window.innerWidth;
+            var v_left = (b_width - divId.clientWidth) / 2;
+            var v_top = (b_height - divId.clientHeight) / 2;
+            divId.style.left = v_left + 'px';
+            divId.style.top = v_top + 'px';
+        };
+    </script>
+</html>

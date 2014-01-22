@@ -1,0 +1,15 @@
+if (!-e $request_filename){
+	set $rule_0 1$rule_0;
+}
+if ($request_filename !~ "-l"){
+	set $rule_0 2$rule_0;
+}
+if (!-d $request_filename){
+	set $rule_0 3$rule_0;
+}
+if (!-f $request_filename){
+	set $rule_0 4$rule_0;
+}
+if ($rule_0 = "4321"){
+	rewrite ^/(.*)$ /index.php last;
+}
