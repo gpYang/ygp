@@ -118,8 +118,6 @@ class Event {
         $matchAction = call_user_func(array($this->matchController, $routeMatch['action'] . 'Action'));
         if ($matchAction !== false) {
             $this->matchController->view($matchAction);
-        } else {
-            $this->matchController->cleanView();
         }
     }
 

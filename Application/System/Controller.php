@@ -30,7 +30,7 @@ abstract class Controller {
      * @var boolean 是否清除通过事件管理器加载的试图
      */
     protected $cleanView = false;
-    
+
     /**
      * @var object 事件管理器
      */
@@ -45,7 +45,7 @@ abstract class Controller {
      * @var array 模型数据
      */
     public static $modelData = array();
-    
+
     /**
      * 构造方法,保存事务管理器
      * 
@@ -85,12 +85,9 @@ abstract class Controller {
      * @param string $common 公共视图路径
      * @param boolean $isEvent 是否通过事件管理器加载
      */
-    public function view($data = null, $path = '', $common = '', $isEvent = false) {
+    public function view($data = null, $path = '', $common = '') {
         if ($path === '') {
             $path = implode('/', $this->event->getRouter()->getRouteMatch());
-        }
-        if (true === $isEvent) {
-            $this->eventView[] = $common . $path;
         }
         $this->viewData[$common . $path] = new View($path, $common, $data);
     }
@@ -99,11 +96,6 @@ abstract class Controller {
      * 渲染
      */
     public function render() {
-        if ($this->cleanView) {
-            foreach ($this->eventView as $value) {
-                unset($this->viewData[$value]);
-            }
-        }
         foreach ($this->viewData as $value) {
             $value->includeView();
         }
@@ -174,13 +166,6 @@ abstract class Controller {
         return self::${$name};
     }
 
-    /**
-     * 删除事件管理器加载的试图
-     */
-    public function cleanView() {
-        $this->cleanView = true;
-    }
-    
     /**
      * 获取事务管理器
      * 
