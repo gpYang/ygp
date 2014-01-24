@@ -5,18 +5,14 @@
  * and open the template in the editor.
  */
 
-namespace Scan;
+namespace Manual;
 
 use System\Controller;
 
 class IndexController extends Controller {
 
-    function dirAction() {
-        $top = !empty($_GET['top']) ? $_GET['top'] : PATH_APPLICATION;
-        return array(
-            'top' => $top,
-            'scan' => scandir($top)
-        );
+    function indexAction() {
+        return array();
     }
 
     function fileAction() {

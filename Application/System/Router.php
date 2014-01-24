@@ -44,9 +44,9 @@ class Router {
      * @param type $config
      */
     public function __construct($config) {
-        if (isset($config['route_rule']) && is_array($config)) {
+        if (isset($config['route_rule']) && is_array($config['route_rule'])) {
             foreach ($config['route_rule'] as $value) {
-                call_user_method_array('addRule', $this, $value);
+                call_user_func_array(array($this, 'addRule'), $value);
             }
         }
     }
@@ -125,7 +125,7 @@ class Router {
         foreach ($breakRoute as $value) {
             if (isset($config['nogrep'][$value])) {
                 $config = &$config['nogrep'][$value];
-                $route = $config['index'];
+                isset($config['index']) && $route = $config['index'];
                 continue;
             }
             if (isset($config['grep'])) {
@@ -133,7 +133,7 @@ class Router {
                     if (preg_match(sprintf('/%s/', $grep), $value, $matches)) {
                         $this->_routeGrepMatch = array_merge($this->_routeGrepMatch, $matches);
                         $config = &$config['grep'][$grep];
-                        $route = $config['index'];
+                        isset($config['index']) && $route = $config['index'];
                         continue;
                     }
                 }

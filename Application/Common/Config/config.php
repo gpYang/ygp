@@ -41,7 +41,7 @@ return array(
         ),
     ),
     'debug' => array(
-        'on' => true,
+        'on' => false,
         'debug-path' => 'Debug',
         'debug-view' => 'Debug',
     ),
@@ -63,7 +63,8 @@ return array(
 //        'upload' => PATH_PUBLIC . '/Upload'
 //    ),
     'route_rule' => array(
-        array(array('index', 'index', 'index'), 'user'),
+        array(array('manual', 'index', 'index'), 'manual'),
+        array(array('manual', 'index', 'index'), 'manual/index.phtml'),
         array(array('a', 'b', 'c'), 'user/[:id]/data/[:name]', array('\d+', '\w+'))
     ),
     'timezone' => 'PRC',
