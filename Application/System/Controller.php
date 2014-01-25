@@ -37,6 +37,16 @@ abstract class Controller {
     protected $event = null;
 
     /**
+     * @var string layout模式开关/layout模板名
+     */
+    protected $layout = '';
+    
+    /**
+     * @var array route规则中的匹配值
+     */
+    protected $get = array();
+
+    /**
      * @var array 逻辑数据
      */
     public static $logicData = array();
@@ -89,7 +99,7 @@ abstract class Controller {
         if ($path === '') {
             $path = implode('/', $this->event->getRouter()->getRouteMatch());
         }
-        $this->viewData[$common . $path] = new View($path, $common, $data);
+        return ($this->viewData[$common . $path] = new View($path, $common, $data));
     }
 
     /**
@@ -173,6 +183,36 @@ abstract class Controller {
      */
     public function getEvent() {
         return $this->event;
+    }
+
+    /**
+     * 开启/关闭layout模式
+     * 
+     * @param string $layout 空为关闭layout,有值为layout模板文件名
+     */
+    public function layout($layout = '') {
+        $this->layout = $layout;
+    }
+
+    /**
+     * 获取layout
+     * 
+     * @return type
+     */
+    public function getLayout() {
+        return $this->layout;
+    }
+    
+    public function setGet($get) {
+        $this->get = $get;
+    }
+
+
+    protected function getGet($name = '') {
+        if ($name) {
+            return $this->get[$name];
+        }
+        return $this->get;
     }
 
 }

@@ -9,6 +9,8 @@
 
 namespace System;
 
+use System\View;
+
 /**
  * @package System
  */
@@ -117,7 +119,18 @@ class Event {
         $routeMatch = $this->router->getRouteMatch();
         $matchAction = call_user_func(array($this->matchController, $routeMatch['action'] . 'Action'));
         if ($matchAction !== false) {
-            $this->matchController->view($matchAction);
+            $layout = $this->matchController->getLayout();
+            $common = '';
+            if ($layout) {
+                $path = implode('/', $this->router->getRouteMatch());
+                $view = new View($path, '', $matchAction);
+                ob_start();
+                $view->includeView();
+                $content = ob_get_clean();
+                $matchAction['content'] = $content;
+                $common = 'layout';
+            }
+            $this->matchController->view($matchAction, $layout, $common);
         }
     }
 

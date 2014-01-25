@@ -41,7 +41,7 @@ return array(
         ),
     ),
     'debug' => array(
-        'on' => false,
+        'on' => true,
         'debug-path' => 'Debug',
         'debug-view' => 'Debug',
     ),
@@ -64,8 +64,9 @@ return array(
 //    ),
     'route_rule' => array(
         array(array('manual', 'index', 'index'), 'manual'),
-        array(array('manual', 'index', 'index'), 'manual/index.phtml'),
-        array(array('a', 'b', 'c'), 'user/[:id]/data/[:name]', array('\d+', '\w+'))
+        array(array('index', 'index', 'index'), 'user/[:id]/data/[:name]', array('\d+', '\w+')),
+        array(array('index', 'index', 'index'), 'user/[:name]/data/[:id]', array('\w+', '\d+')),
+        array(array('index', 'index', 'index'), 'user/[:id]/data/', array('\d+', '\w+', '\d+')),
     ),
     'timezone' => 'PRC',
 //    'cache' => 'Memcache',

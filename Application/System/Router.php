@@ -79,11 +79,12 @@ class Router {
         $rule = explode('/', trim($rule, '/'));
         $i = 0;
         $routeMatch = &$this->_ruleMatch;
+        $routeGrepRule = array();
         foreach ($rule as $value) {
             $ruleMatch = 'nogrep';
             if (false !== strpos($value, ':')) {
                 preg_match_all('/\[:([^\]]*)\]/', $value, $matches);
-                $this->_routeGrepRule = array_merge($this->_routeGrepRule, (array) $matches[1]);
+                $routeGrepRule = array_merge($routeGrepRule, (array) $matches[1]);
                 $ruleMatch = 'grep';
                 $value = $grep[$i];
                 $i++;
@@ -92,7 +93,7 @@ class Router {
             !isset($routeMatch[$ruleMatch][$value]) && $routeMatch[$ruleMatch][$value] = array();
             $routeMatch = &$routeMatch[$ruleMatch][$value];
         }
-        $routeMatch['index'] = $route;
+        $routeMatch['match'] = array('index' => $route, 'grep' => $routeGrepRule);
     }
 
     /**
@@ -125,7 +126,10 @@ class Router {
         foreach ($breakRoute as $value) {
             if (isset($config['nogrep'][$value])) {
                 $config = &$config['nogrep'][$value];
-                isset($config['index']) && $route = $config['index'];
+                if (isset($config['match'])) {
+                    $route = $config['match']['index'];
+                    $this->_routeGrepRule = $config['match']['grep'];
+                }
                 continue;
             }
             if (isset($config['grep'])) {
@@ -133,8 +137,11 @@ class Router {
                     if (preg_match(sprintf('/%s/', $grep), $value, $matches)) {
                         $this->_routeGrepMatch = array_merge($this->_routeGrepMatch, $matches);
                         $config = &$config['grep'][$grep];
-                        isset($config['index']) && $route = $config['index'];
-                        continue;
+                        if (isset($config['match'])) {
+                            $route = $config['match']['index'];
+                            $this->_routeGrepRule = $config['match']['grep'];
+                        }
+                        break;
                     }
                 }
             }
@@ -160,6 +167,8 @@ class Router {
             if (!method_exists($class, $this->routeMatch['action'] . 'Action')) {
                 $this->notFound();
             }
+            $routeGerpRule = array_slice($this->_routeGrepRule, 0, count($this->_routeGrepMatch));
+            $routeGerpRule && $class->setGet(array_combine($routeGerpRule, $this->_routeGrepMatch));
         }
     }
 
@@ -167,8 +176,8 @@ class Router {
      * 404
      */
     public function notFound() {
-        @ob_clean();
-        include PATH_APPLICATION . '/View/Error/404' . HTML_EXT;
+//        @ob_clean();
+//        include PATH_APPLICATION . '/View/Error/404' . HTML_EXT;
         exit();
     }
 
