@@ -12,20 +12,16 @@ return array(
     },
     'route' => array(),
     function($e) {
-        $e->getRouter()->addRule(array('manual', 'index', 'index'), 'manual');
-        $e->getRouter()->addRule(array('manual', 'index', 'index'), 'manual/index.phtml');
+        $e->getRouter()->addRule(array('manual', 'start', 'index'), 'manual/start.html');
+        $e->getRouter()->addRule(array('manual', 'start', 'environment'), 'manual/environment.html');
+        $e->getRouter()->addRule(array('manual', 'start', 'download'), 'manual/download.html');
     },
-    'match' => array(),
+    'route' => array(),
+    'match' => array(true),
     function($e) {
         $e->getMatchController()->layout('layout_manual');
     },
     'bootstrap' => array(),
-    function($e) {
-//        $e->getMatchController()->view(null, 'footer', 'footer', true);
-//        if (config('debug/on')) {
-//            $e->getMatchController()->view(null, config('debug/debug-path'), config('debug/debug-view'), true);
-//        }
-    },
     'finish' => array(),
 );
 ?>

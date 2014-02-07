@@ -184,9 +184,13 @@ class Router {
     /**
      * 得到当前匹配路由
      * 
+     * @param boolean $reMatch 是否重新匹配
      * @return array
      */
-    public function getRouteMatch() {
+    public function getRouteMatch($reMatch) {
+        if ($reMatch) {
+            $this->route();
+        }
         return $this->routeMatch;
     }
 

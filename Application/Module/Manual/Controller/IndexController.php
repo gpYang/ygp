@@ -11,15 +11,12 @@ use System\Controller;
 
 class IndexController extends Controller {
 
+    private $return = array(
+        'controller' => 'index',
+    );
+    
     function indexAction() {
-        return array();
-    }
-
-    function fileAction() {
-        return array(
-          'content' => file_get_contents($_GET['file']),
-        );
-        return false;
+        return $this->return;
     }
 
 }

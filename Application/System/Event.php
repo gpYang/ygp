@@ -80,7 +80,7 @@ class Event {
                 call_user_func($event, $this);
             } else {
                 if (method_exists($this, $eventName)) {
-                    $this->$eventName();
+                    call_user_func_array(array($this, $eventName), $event);
                 }
             }
             is_int($eventName) ? $this->_ranEvents[] = $event : $this->_ranEvents[$eventName] = $event;
@@ -102,9 +102,11 @@ class Event {
 
     /**
      * 匹配路由
+     * 
+     * @param boolean $reMatch 是否重新匹配
      */
-    public function match() {
-        $routeMatch = $this->router->getRouteMatch();
+    public function match($reMatch = false) {
+        $routeMatch = $this->router->getRouteMatch($reMatch);
         $matchClass = ucfirst($routeMatch['module']) . '\\' . ucfirst($routeMatch['controller']) . 'Controller';
         if (!class_exists($matchClass)) {
             $this->router->notFound();
