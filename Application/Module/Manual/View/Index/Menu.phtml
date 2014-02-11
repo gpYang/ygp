@@ -26,6 +26,23 @@
                             </li>
                         </ul>					
                     </li>
+                    <li class="<?php if ($this->controller === 'system') echo 'show'; ?> child">
+                        <a class="title <?php if ($this->action === 'system-index') echo 'selected'; ?>" href="/manual/system.html" title="入门">第3章&nbsp;系统核心</a>
+                        <ul>
+                            <li>
+                                <a class="title <?php if ($this->action === 'system-router') echo 'selected'; ?>" href="/manual/system-router.html">3.1&nbsp;路由</a>
+                            </li>
+                            <li>
+                                <a class="title <?php if ($this->action === 'system-events') echo 'selected'; ?>" href="/manual/config-events.html">2.2&nbsp;事务配置</a>
+                            </li>
+                            <li>
+                                <a class="title <?php if ($this->action === 'system-module') echo 'selected'; ?>" href="/manual/config-module.html">2.3&nbsp;模块配置</a>
+                            </li>
+                            <li>
+                                <a class="title <?php if ($this->action === 'system-others') echo 'selected'; ?>" href="/manual/config-others.html">2.4&nbsp;其他配置</a>
+                            </li>
+                        </ul>					
+                    </li>
                 </ul>
             </div>
         </div>

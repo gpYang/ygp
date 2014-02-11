@@ -63,10 +63,12 @@ return array(
 //        'upload' => PATH_PUBLIC . '/Upload'
 //    ),
     'route_rule' => array(
-        array(array('manual', 'index', 'index'), 'manual'),
-        array(array('index', 'index', 'index'), 'user/[:id]/data/[:name]', array('\d+', '\w+')),
-        array(array('index', 'index', 'index'), 'user/[:name]/data/[:id]', array('\w+', '\d+')),
-        array(array('index', 'index', 'index'), 'user/[:id]/data/123', array('\d+', '\w+', '\d+')),
+//        array(array('manual', 'index', 'index'), 'manual'),
+//        array(array('manual', '?controller', 'index'), 'manual/[:controller].html', array('[a-z]+')),
+        array(array('manual', '?controller', '?action'), 'manual/[:controller]-[:action]-[:id]-[:name].html/[:data]', array('[a-z]+', '[a-z]+', '\d+', '[a-z]+', '[a-z]+')),
+//        array(array('index', 'index', 'index'), 'user/[:id]/data/[:name]', array('\d+', '\w+')),
+//        array(array('index', 'index', 'index'), 'user/[:name]/data/[:id]', array('\w+', '\d+')),
+//        array(array('index', 'index', 'index'), 'user/[:id]/data/123', array('\d+', '\w+', '\d+')),
     ),
     'timezone' => 'PRC',
 //    'cache' => 'Memcache',

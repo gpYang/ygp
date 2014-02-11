@@ -34,6 +34,11 @@ class Router {
     private $_routeGrepRule = array();
 
     /**
+     * @var array 路由正则匹配结果
+     */
+    private $_routeGrepResult = array();
+
+    /**
      * @var array 路由规则
      */
     private $_ruleMatch = array();
@@ -60,6 +65,9 @@ class Router {
         if (empty($route)) {
             $route = implode('/', $defaultRoute);
         }
+        $this->_routeGrepRule = array();
+        $this->_routeGrepMatch = array();
+        $this->_routeGrepResult = array();
         return ($this->routeMatch = $this->parseRoute($route));
     }
 
@@ -79,15 +87,24 @@ class Router {
         $rule = explode('/', trim($rule, '/'));
         $i = 0;
         $routeMatch = &$this->_ruleMatch;
+        foreach ($grep as $key => $value) {
+            $grep[$key] = sprintf('(%s)', rtrim(ltrim($value, '^'), '$'));
+        }
         $routeGrepRule = array();
         foreach ($rule as $value) {
             $ruleMatch = 'nogrep';
             if (false !== strpos($value, ':')) {
                 preg_match_all('/\[:([^\]]*)\]/', $value, $matches);
-                $routeGrepRule = array_merge($routeGrepRule, (array) $matches[1]);
+                if (!isset($matches[1])) {
+                    continue;
+                }
+                $routeGrepRule = array_merge($routeGrepRule, $matches[1]);
                 $ruleMatch = 'grep';
-                $value = $grep[$i];
-                $i++;
+                $value = preg_quote(preg_replace('/\[:([^\]]*)\]/', '@', $value));
+                foreach ($matches[1] as $v) {
+                    $value = preg_replace('/@/', $grep[$i], $value, 1);
+                    $i++;
+                }
             }
             !isset($routeMatch[$ruleMatch]) && $routeMatch[$ruleMatch] = array();
             !isset($routeMatch[$ruleMatch][$value]) && $routeMatch[$ruleMatch][$value] = array();
@@ -134,7 +151,8 @@ class Router {
             }
             if (isset($config['grep'])) {
                 foreach ($config['grep'] as $grep => $v2) {
-                    if (preg_match(sprintf('/%s/', $grep), $value, $matches)) {
+                    if (preg_match(sprintf('/^%s$/', $grep), $value, $matches)) {
+                        array_shift($matches);
                         $this->_routeGrepMatch = array_merge($this->_routeGrepMatch, $matches);
                         $config = &$config['grep'][$grep];
                         isset($config['match']) && $this->_routeGrepRule = $config['match']['grep'];
@@ -144,8 +162,15 @@ class Router {
                 }
             }
         }
+        !empty($this->_routeGrepMatch) && $this->_routeGrepResult = array_combine(array_slice($this->_routeGrepRule, 0, count($this->_routeGrepMatch)), $this->_routeGrepMatch);
         if (isset($config['match']) && $match === $count) {
             $route = $config['match']['index'];
+            foreach ($route as $key => $value) {
+                if (false !== strpos($value, '?')) {
+                    $trimMark = ltrim($value, '?');
+                    isset($this->_routeGrepResult[$trimMark]) && $route[$key] = $this->_routeGrepResult[$trimMark];
+                }
+            }
         }
         return $route;
     }
@@ -168,8 +193,7 @@ class Router {
             if (!method_exists($class, $this->routeMatch['action'] . 'Action')) {
                 $this->notFound();
             }
-            $routeGerpRule = array_slice($this->_routeGrepRule, 0, count($this->_routeGrepMatch));
-            $routeGerpRule && $class->setGet(array_combine($routeGerpRule, $this->_routeGrepMatch));
+            $this->_routeGrepResult && $class->setGet($this->_routeGrepResult);
         }
     }
 
@@ -177,8 +201,9 @@ class Router {
      * 404
      */
     public function notFound() {
+        echo 333333333333333;
 //        @ob_clean();
-        include PATH_APPLICATION . '/View/Error/404' . HTML_EXT;
+//        include PATH_APPLICATION . '/View/Error/404' . HTML_EXT;
         exit();
     }
 

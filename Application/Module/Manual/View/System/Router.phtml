@@ -1,0 +1,24 @@
+<div id="gird">
+    <div class="inner">
+        <div class="book-title"><h1>3.1 路由</h1></div>
+        <hr>
+        <div class="book-content">
+            <div>
+                <h2>System/Router</h2>
+                本框架的路由配置分2种
+                <h3>默认配置[/模块/控制器/操作]</h3>
+                框架默认用的路由,不需要任何配置,例如地址栏输入http://mylocal/testa/testb/testc将匹配Testa模块下的
+                Testb控制器下的testc操作..需要注意的是,test-c将匹配testC操作..
+                <h3>支持正则匹配路由</h3>
+                此种路由需要自己配置,可通过在config.php中配置或者直接调用router类的addRule方法<br>
+                config.php
+                <div class="code">
+                    'route_rule' => array(
+                    array(array('manual', 'index', 'index'), 'manual'),
+                    array(array('index', 'index', 'index'), 'user/[:id]/[:name]', array('\d+', '\w+')),
+                    ),
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
