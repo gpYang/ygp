@@ -1,0 +1,52 @@
+<div id="gird">
+    <div class="inner">
+        <div class="book-title"><h1>2.3 模块配置</h1></div>
+        <hr>
+        <div class="book-content">
+            <h2>Module/events.php</h2>
+            <div>
+                跟2.2事务配置中一致,在框架运行到route之后会得到匹配的模块,如果模块根目录下有events.php框架会自动加载该模块下的
+                events.php,因为route在总的事务中已经执行过了,所以route不会再执行,如果模块下有新增过路由规则,match时需要传入参数true,因
+                为这些路由规则在总的事务配置中是没有的,为了效率..本人推荐在总的事务配置或config.php中加入该模块入口路由规则,其余的路由规
+                则全部加在模块的事务配置下.<br>
+                如下<br>
+                <h3>Config/config.php</h3>
+                <div class="code">
+                    'route_rule' => array(<br>
+                    <div class="in_array">
+                        array(array('manual', 'index', 'index'), 'manual'),<span class="note">//此处加入manual入口路由规则</span><br>
+                    </div>
+                    ),<br>
+                </div>
+                ------------------------------------------------------------------------------------------------------------------------------------------<br>
+                或者<br>
+                <h3>Config/events.php</h3>
+                <div class="code">
+                    function($e) {<br>
+                    <div class="in_array">
+                        $e->getRouter()->addRule(array('manual', 'index', 'index'), 'manual/index.html');<span class="note">//此处加入manual入口路由规则</span><br>
+                    </div>
+                    },<br>
+                </div>
+                <h3>Module/events.php</h3>
+                <div class="code">
+                    function($e) {<br>
+                    <div class="in_array">
+                        $e->getRouter()->addRule(array('manual', 'index', 'index'), 'manual/index.html');<span class="note">//此处加入manual子路由规则</span><br>
+                        $e->getRouter()->addRule(array('manual', 'start', 'index'), 'manual/start.html');<span class="note">//此处加入manual子路由规则</span><br>
+                        $e->getRouter()->addRule(array('manual', 'config', 'index'), 'manual/config.html');<span class="note">//此处加入manual子路由规则</span><br>
+                    </div>
+                    },<br>
+                    'match' => array(true),<span class="note">//此处传入的true是表示需要从新匹配路由,因为子路由是在模块配置中加入的</span><br>
+                    function($e) {<br>
+                    <div class="in_array">
+                        $e->getMatchController()->layout('layout_manual');<span class="note">//开启layout模式,并指定layout_manual文件</span><br>
+                    </div>
+                    },<br>
+                    'bootstrap' => array(),<br>
+                    'finish' => array(),<br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

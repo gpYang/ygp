@@ -203,6 +203,7 @@ img{
     font-size: 12px;
     font-family: Consolas;
     margin: 10px 0;
+    width: 800px;
 }
 
 .book-content p{
@@ -511,6 +512,16 @@ img{
 .book-content a{
     color: #459C01;
     border-bottom: 1px dotted #459C01;
+}
+
+.book-content .in_array{
+    margin-left: 30px; 
+    width: 800px;
+}
+
+.book-content .note{
+    color: #999999;
+    margin-left: 20px; 
 }
 
 .book-content ul{

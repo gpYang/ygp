@@ -56,7 +56,7 @@ class Request {
      * 设置请求uri
      */
     private function setRequestUri() {
-        self::$_requestUri = config('scheme') . '://' . $_SERVER['HTTP_HOST'] . (isset($_SERVER['PATH_INFO']) ? ($_SERVER['PATH_INFO'] . '?' . $_SERVER['QUERY_STRING']) : $_SERVER['REQUEST_URI']);
+        self::$_requestUri = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . (isset($_SERVER['PATH_INFO']) ? ($_SERVER['PATH_INFO'] . '?' . $_SERVER['QUERY_STRING']) : $_SERVER['REQUEST_URI']);
     }
 
     /**

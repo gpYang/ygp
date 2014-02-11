@@ -102,6 +102,7 @@ class View {
 
     /**
      *  魔术方法 加载助手
+     * 
      * @param string $name 方法名
      * @param array $argument 参数
      * @return mixed

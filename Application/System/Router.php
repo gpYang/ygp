@@ -123,13 +123,13 @@ class Router {
      */
     private function parseRouteByConfig($config, $breakRoute) {
         $route = $breakRoute;
+        $count = count($breakRoute);
+        $match = 0;
         foreach ($breakRoute as $value) {
             if (isset($config['nogrep'][$value])) {
                 $config = &$config['nogrep'][$value];
-                if (isset($config['match'])) {
-                    $route = $config['match']['index'];
-                    $this->_routeGrepRule = $config['match']['grep'];
-                }
+                isset($config['match']) && $this->_routeGrepRule = $config['match']['grep'];
+                $match += 1;
                 continue;
             }
             if (isset($config['grep'])) {
@@ -137,14 +137,15 @@ class Router {
                     if (preg_match(sprintf('/%s/', $grep), $value, $matches)) {
                         $this->_routeGrepMatch = array_merge($this->_routeGrepMatch, $matches);
                         $config = &$config['grep'][$grep];
-                        if (isset($config['match'])) {
-                            $route = $config['match']['index'];
-                            $this->_routeGrepRule = $config['match']['grep'];
-                        }
+                        isset($config['match']) && $this->_routeGrepRule = $config['match']['grep'];
+                        $match += 1;
                         break;
                     }
                 }
             }
+        }
+        if (isset($config['match']) && $match === $count) {
+            $route = $config['match']['index'];
         }
         return $route;
     }
@@ -177,7 +178,7 @@ class Router {
      */
     public function notFound() {
 //        @ob_clean();
-//        include PATH_APPLICATION . '/View/Error/404' . HTML_EXT;
+        include PATH_APPLICATION . '/View/Error/404' . HTML_EXT;
         exit();
     }
 
@@ -187,7 +188,7 @@ class Router {
      * @param boolean $reMatch 是否重新匹配
      * @return array
      */
-    public function getRouteMatch($reMatch) {
+    public function getRouteMatch($reMatch = false) {
         if ($reMatch) {
             $this->route();
         }

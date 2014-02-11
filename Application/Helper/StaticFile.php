@@ -27,9 +27,6 @@ class StaticFile {
      * @return string
      */
     public function __invoke($dir, $name) {
-        if (empty(static::$host)) {
-            static::$host = config('host_url');
-        }
         return static::$host . '/' . ucfirst($dir) . '/' . $name;
     }
 

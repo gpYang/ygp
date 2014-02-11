@@ -66,7 +66,7 @@ return array(
         array(array('manual', 'index', 'index'), 'manual'),
         array(array('index', 'index', 'index'), 'user/[:id]/data/[:name]', array('\d+', '\w+')),
         array(array('index', 'index', 'index'), 'user/[:name]/data/[:id]', array('\w+', '\d+')),
-        array(array('index', 'index', 'index'), 'user/[:id]/data/', array('\d+', '\w+', '\d+')),
+        array(array('index', 'index', 'index'), 'user/[:id]/data/123', array('\d+', '\w+', '\d+')),
     ),
     'timezone' => 'PRC',
 //    'cache' => 'Memcache',

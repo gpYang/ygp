@@ -3,50 +3,29 @@
         <div class="book-menu">
             <div class="list">
                 <ul>
-                    <li class="show child">
+                    <li class="child">
                         <a class="title <?php if ($this->controller === 'index') echo 'selected'; ?>" href="/manual/index.html" title="首页">首页</a>
                     </li>
                     <li class=" child">
                         <a class="title <?php if ($this->controller === 'start') echo 'selected'; ?>" href="/manual/start.html" title="入门">第1章&nbsp;入门</a>
-                        <ul <?php if ($this->controller === 'start') echo 'style="display:block"'; ?>>
+                    </li>	
+                    <li class="<?php if ($this->controller === 'config') echo 'show'; ?> child">
+                        <a class="title <?php if ($this->action === 'config-index') echo 'selected'; ?>" href="/manual/config.html" title="入门">第2章&nbsp;配置</a>
+                        <ul>
                             <li>
-                                <a class="" href="/manual/environment.html">1.1&nbsp;环境要求</a>
+                                <a class="title <?php if ($this->action === 'config-global') echo 'selected'; ?>" href="/manual/config-global.html">2.1&nbsp;全局配置</a>
                             </li>
                             <li>
-                                <a class="" href="/manual/download.html">1.2&nbsp;下载框架</a>
+                                <a class="title <?php if ($this->action === 'config-events') echo 'selected'; ?>" href="/manual/config-events.html">2.2&nbsp;事务配置</a>
                             </li>
                             <li>
-                                <a class="" href="/manual/get_thinkphp.html">1.3&nbsp;获取ThinkPHP</a>
+                                <a class="title <?php if ($this->action === 'config-module') echo 'selected'; ?>" href="/manual/config-module.html">2.3&nbsp;模块配置</a>
                             </li>
                             <li>
-                                <a class="" href="/manual/environment.html">1.4&nbsp;环境要求</a>
+                                <a class="title <?php if ($this->action === 'config-others') echo 'selected'; ?>" href="/manual/config-others.html">2.4&nbsp;其他配置</a>
                             </li>
-                            <li>
-                                <a class="" href="/manual/licence.html">1.5&nbsp;许可协议</a>
-                            </li>
-                            <li>
-                                <a class="" href="/manual/directory.html">1.6&nbsp;目录结构</a>
-                            </li>
-                            <li>
-                                <a class="" href="/manual/naming_conventions.html">1.7&nbsp;命名规范</a>
-                            </li>
-                            <li>
-                                <a class="" href="/manual/mvc.html">1.8&nbsp;MVC分层</a>
-                            </li>
-                            <li>
-                                <a class="" href="/manual/cbd.html">1.9&nbsp;CBD架构</a>
-                            </li>
-                            <li>
-                                <a class="" href="/manual/features.html">1.10&nbsp;特性概述</a>
-                            </li>
-                            <li>
-                                <a class="" href="/manual/system_process.html">1.11&nbsp;系统流程</a>
-                            </li>
-                            <li>
-                                <a class="" href="/manual/development_process.html">1.12&nbsp;开发流程</a>
-                            </li>							
                         </ul>					
-                    </li>				
+                    </li>
                 </ul>
             </div>
         </div>

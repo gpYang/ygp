@@ -279,7 +279,7 @@ class Curl {
             if ($keep) {
                 $this->_error[] = (string) $string;
             }
-            echo $string, '<br />';
+            echo $string, '<br>';
         }
     }
 

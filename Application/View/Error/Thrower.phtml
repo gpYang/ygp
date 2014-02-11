@@ -10,16 +10,16 @@
     </head>
     <body>
         <div id="main" style="margin: 0 auto;position:absolute">
-            <div style="margin: 0 auto; width: 18%"><image src="<?php echo config('host_url') . '/Image/thrower.jpg' ?>"></image></div>
+            <div style="margin: 0 auto; width: 18%"><image src="/Image/thrower.jpg"></image></div>
             <div>
                 <h2>啊~出错了</h2>
             </div>
             <hr />
             <div>
                 <h3>--错误文件--</h3>
-                <label style="margin-left: 20px; ">错误发生在 <?php echo $this->getFile() ?> 第<?php echo $this->getLine() ?>行</label></br>
+                <label style="margin-left: 20px; ">错误发生在 <?php echo $this->getFile() ?> 第<?php echo $this->getLine() ?>行</label><br>
                 <h3>--错误信息--</h3>
-                <label style="margin-left: 20px; "><?php echo $this->getMessage() ?></label></br>
+                <label style="margin-left: 20px; "><?php echo $this->getMessage() ?></label><br>
             </div>
             <hr />
             <div>
@@ -27,9 +27,9 @@
                 <?php
                 foreach ($this->string as $key => $value) {
                     preg_match('/\d (.*)/', $value, $matches);
-                    echo '<label style="margin-left: 20px; ">' . $key . ' ' . end($matches) . '</label></br>';
+                    echo '<label style="margin-left: 20px; ">' . $key . ' ' . end($matches) . '</label><br>';
                 }
-                echo '<label style="margin-left: 20px; ">' . count($this->string) . ' The End!</label></br>';
+                echo '<label style="margin-left: 20px; ">' . count($this->string) . ' The End!</label><br>';
                 ?>
             </div>
         </div>

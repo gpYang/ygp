@@ -7,16 +7,15 @@
  * @package Common.Config
  */
 return array(
-    function() {
-        date_default_timezone_set(config('timezone'));
-    },
-    'route' => array(),
     function($e) {
+        $e->getRouter()->addRule(array('manual', 'index', 'index'), 'manual/index.html');
         $e->getRouter()->addRule(array('manual', 'start', 'index'), 'manual/start.html');
-        $e->getRouter()->addRule(array('manual', 'start', 'environment'), 'manual/environment.html');
-        $e->getRouter()->addRule(array('manual', 'start', 'download'), 'manual/download.html');
+        $e->getRouter()->addRule(array('manual', 'config', 'index'), 'manual/config.html');
+        $e->getRouter()->addRule(array('manual', 'config', 'global'), 'manual/config-global.html');
+        $e->getRouter()->addRule(array('manual', 'config', 'events'), 'manual/config-events.html');
+        $e->getRouter()->addRule(array('manual', 'config', 'module'), 'manual/config-module.html');
+        $e->getRouter()->addRule(array('manual', 'config', 'others'), 'manual/config-others.html');
     },
-    'route' => array(),
     'match' => array(true),
     function($e) {
         $e->getMatchController()->layout('layout_manual');

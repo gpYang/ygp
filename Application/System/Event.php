@@ -78,10 +78,8 @@ class Event {
             }
             if (is_object($event)) {
                 call_user_func($event, $this);
-            } else {
-                if (method_exists($this, $eventName)) {
-                    call_user_func_array(array($this, $eventName), $event);
-                }
+            } elseif (method_exists($this, $eventName)) {
+                call_user_func_array(array($this, $eventName), $event);
             }
             is_int($eventName) ? $this->_ranEvents[] = $event : $this->_ranEvents[$eventName] = $event;
         }

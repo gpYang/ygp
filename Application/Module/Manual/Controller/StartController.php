@@ -18,16 +18,6 @@ class StartController extends Controller {
     public function indexAction() {
         return $this->return;
     }
-    
-    public function environmentAction() {
-        return $this->return;
-    }
-    
-    public function downloadAction() {
-        return $this->return;
-    }
-    
-    
 
 }
 

@@ -1,0 +1,76 @@
+<div id="gird">
+    <div class="inner">
+        <div class="book-title"><h1>2.1 全局配置</h1></div>
+        <hr>
+        <div class="book-content">
+            <h2>Common/Config/config.php</h2>
+            <div class="code">
+                'route' => array(<span class="note">//默认路由,访问域名时匹配的路由</span><br>
+                <div class="in_array">
+                    'default-module' => 'index',<span class="note">//默认模块</span><br>
+                    'default-controller' => 'index',<span class="note">//默认控制器</span><br>
+                    'default-action' => 'index',<span class="note">//默认动作</span><br>
+                </div>
+                ),<br>
+                'memcache' => array(<span class="note">//memcache配置</span><br>
+                <div class="in_array">
+                    'host' => '127.0.0.1',<br>
+                    'port' => '11211',<br>
+                </div>
+                ),<br>
+                'db' => array(<span class="note">//数据库配置,可配置多个链接,在用的时候自动读写分离</span><br>
+                <div class="in_array">
+                    'reader' => array(<span class="note">//数据库连接名,用于区分不同的数据库配置</span><br>
+                    <div class="in_array">
+                        'driver' => 'Mysql',<span class="note">//目前暂时只写了Mysql-_-#</span><br>
+                        'database' => 'test',<span class="note">//库名</span><br>
+                        'username' => 'root',<span class="note">//用户名</span><br>
+                        'password' => '',<span class="note">//密码</span><br>
+                        'hostname' => 'localhost',<span class="note">//服务器地址</span><br>
+                        'port' => '3306',<span class="note">//端口</span><br>
+                        'table_prefix' => '',<span class="note">//表前缀</span><br>
+                        'characterset' => 'utf8',<span class="note">//字符集</span><br>
+                        'pconnect' => false,<span class="note">//是否长连接</span><br>
+                    </div>
+                    ),<br>
+                    ),<br>
+                </div>
+                'debug' => array(<span class="note">//debug调试</span><br>
+                <div class="in_array">
+                    'on' => true,<span class="note">//开关</span><br>
+                    'debug-path' => 'Debug',<span class="note">//视图和公共视图路径,debug-view/debug-path为debug视图路径</span><br>
+                    'debug-view' => 'Debug'<br>
+                </div>
+                ),<br>
+                'helper' => array(<span class="note">//视图助手,当前只写了一个助手类,可自行添加</span><br>
+                <div class="in_array">
+                    'StaticFile'<span class="note">//静态文件类</span><br>
+                </div>
+                ),<br>
+                'ext' => array(<span class="note">//文件后缀</span><br>
+                <div class="in_array">
+                    'php' => '.php',<br>
+                    'html' => '.phtml',<br>
+                    'log' => '.log',<br>
+                </div>
+                ),<br>
+                'error_reporting' => E_ALL,<span class="note">//错误等级</span><br>
+                'app_key' => '123',<span class="note">//项目标示,例如有可能会多个项目同用一个memcache,这个标示可以用来区分</span><br>
+                'language' => 'zh_CN',<span class="note">//语言</span><br>
+                'path' => array(<span class="note">//log,upload,filecache等文件路径</span><br>
+                <div class="in_array">
+                    'log' => PATH_PUBLIC . '/_log',<br>
+                    'upload' => PATH_PUBLIC . '/Upload'<br>
+                </div>
+                ),<br>
+                'route_rule' => array(<span class="note">//路由规则</span><br>
+                <div class="in_array">
+                    array(array('manual', 'index', 'index'), 'manual'),<br>
+                </div>
+                ),<br>
+                'timezone' => 'PRC',<span class="note">//时区</span><br>
+                'cache' => 'Memcache',<span class="note">//使用缓存</span><br>
+            </div>
+        </div>
+    </div>
+</div>
