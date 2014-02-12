@@ -516,7 +516,11 @@ img{
 
 .book-content .in_array{
     margin-left: 30px; 
-    width: 800px;
+    width: 780px;
+}
+
+.book-content .notice{
+    color: #FF0000;
 }
 
 .book-content .note{

@@ -78,18 +78,15 @@ class Router {
      * hostname/user/123/data/kkk将匹配到index/user/user
      * hostname/user/kkk将匹配到/index/user/index
      * 
-     * @param array $route
-     * @param string $rule
-     * @param array $grep
+     * @param array $route 路由
+     * @param string $rule 规则
+     * @param string|array $grep 正则表达式
      */
-    public function addRule($route, $rule, $grep = array()) {
+    public function addRule($route, $rule, $grep = '') {
         //preg_match_all('/(?<nogrep>\/*[^\[\/]*\/*)(?P<grep>\[:[^\]]*])/', $rule, $matches);
         $rule = explode('/', trim($rule, '/'));
         $i = 0;
         $routeMatch = &$this->_ruleMatch;
-        foreach ($grep as $key => $value) {
-            $grep[$key] = sprintf('(%s)', rtrim(ltrim($value, '^'), '$'));
-        }
         $routeGrepRule = array();
         foreach ($rule as $value) {
             $ruleMatch = 'nogrep';
@@ -101,10 +98,12 @@ class Router {
                 $routeGrepRule = array_merge($routeGrepRule, $matches[1]);
                 $ruleMatch = 'grep';
                 $value = preg_quote(preg_replace('/\[:([^\]]*)\]/', '@', $value));
-                foreach ($matches[1] as $v) {
-                    $value = preg_replace('/@/', $grep[$i], $value, 1);
-                    $i++;
-                }
+                if (is_array($grep)) {
+                    for ($i; $i <= count($matches[1]); $i++) {
+                        $value = preg_replace('/@/', sprintf('(%s)', rtrim(ltrim($grep[$i], '^'), '$')), $value, 1);
+                    }
+                } else
+                    $value = str_replace('@', sprintf('(%s)', rtrim(ltrim($grep, '^'), '$')), $value);
             }
             !isset($routeMatch[$ruleMatch]) && $routeMatch[$ruleMatch] = array();
             !isset($routeMatch[$ruleMatch][$value]) && $routeMatch[$ruleMatch][$value] = array();
@@ -121,7 +120,7 @@ class Router {
      */
     public function parseRoute($route) {
         $defaultRoute = array_values(config('route'));
-        false !== strpos($route, '?') && $route = trim(substr($route, 0, strpos($route, '?')), '/');
+        false !== strpos($route, '?') && $route = substr($route, 0, strpos($route, '?'));
         $breakRoute = $this->parseRouteByConfig($this->_ruleMatch, explode('/', $route));
         $routeMatch = array_keys($this->routeMatch);
         $result = array();
@@ -142,33 +141,36 @@ class Router {
         $route = $breakRoute;
         $count = count($breakRoute);
         $match = 0;
-        foreach ($breakRoute as $value) {
-            if (isset($config['nogrep'][$value])) {
-                $config = &$config['nogrep'][$value];
-                isset($config['match']) && $this->_routeGrepRule = $config['match']['grep'];
-                $match += 1;
-                continue;
-            }
-            if (isset($config['grep'])) {
-                foreach ($config['grep'] as $grep => $v2) {
-                    if (preg_match(sprintf('/^%s$/', $grep), $value, $matches)) {
-                        array_shift($matches);
-                        $this->_routeGrepMatch = array_merge($this->_routeGrepMatch, $matches);
-                        $config = &$config['grep'][$grep];
-                        isset($config['match']) && $this->_routeGrepRule = $config['match']['grep'];
-                        $match += 1;
-                        break;
+        $matches = $routeMatch = array();
+        if (!empty($config)) {
+            foreach ($breakRoute as $value) {
+                if (isset($config['nogrep'][$value])) {
+                    $config = &$config['nogrep'][$value];
+                    isset($config['match']) && $this->_routeGrepRule = $config['match']['grep'];
+                    $match += 1;
+                    continue;
+                }
+                if (isset($config['grep'])) {
+                    foreach ($config['grep'] as $grep => $ignore) {
+                        if (preg_match(sprintf('/^%s$/', $grep), $value, $matches)) {
+                            array_shift($matches);
+                            $this->_routeGrepMatch = array_merge($this->_routeGrepMatch, $matches);
+                            $config = &$config['grep'][$grep];
+                            isset($config['match']) && $this->_routeGrepRule = $config['match']['grep'];
+                            $match += 1;
+                            break;
+                        }
                     }
                 }
             }
-        }
-        !empty($this->_routeGrepMatch) && $this->_routeGrepResult = array_combine(array_slice($this->_routeGrepRule, 0, count($this->_routeGrepMatch)), $this->_routeGrepMatch);
-        if (isset($config['match']) && $match === $count) {
-            $route = $config['match']['index'];
-            foreach ($route as $key => $value) {
-                if (false !== strpos($value, '?')) {
-                    $trimMark = ltrim($value, '?');
-                    isset($this->_routeGrepResult[$trimMark]) && $route[$key] = $this->_routeGrepResult[$trimMark];
+            if (isset($config['match']) && $match === $count) {
+                !empty($this->_routeGrepMatch) && $this->_routeGrepResult = array_combine(array_slice($this->_routeGrepRule, 0, count($this->_routeGrepMatch)), $this->_routeGrepMatch);
+                $route = $config['match']['index'];
+                foreach ($route as $key => $value) {
+                    if (false !== strpos($value, '?')) {
+                        $trimMark = ltrim($value, '?');
+                        isset($this->_routeGrepResult[$trimMark]) && $route[$key] = $this->_routeGrepResult[$trimMark];
+                    }
                 }
             }
         }

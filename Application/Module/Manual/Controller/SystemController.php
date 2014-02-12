@@ -20,11 +20,11 @@ class SystemController extends Controller {
     }
 
     public function routerAction() {
-        return array_merge(array('action' => 'system-global'), $this->return);
+        return array_merge(array('action' => 'system-router'), $this->return);
     }
 
-    public function eventsAction() {
-        return array_merge(array('action' => 'system-events'), $this->return);
+    public function eventAction() {
+        return array_merge(array('action' => 'system-event'), $this->return);
     }
 
     public function moduleAction() {

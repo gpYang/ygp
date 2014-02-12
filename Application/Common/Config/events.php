@@ -13,6 +13,9 @@ return array(
     'route' => array(),
     'match' => array(),
     function($e) {
+        $e->getMatchController()->layout('layout_manual');
+    },
+    function($e) {
 //        $e->getMatchController()->view(null, 'header', 'header', true);
     },
     'bootstrap' => array(),

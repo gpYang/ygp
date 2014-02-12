@@ -2,6 +2,7 @@
     <div class="inner">
         <div class="book-menu">
             <div class="list">
+                <?php isset($this->action) || $this->action = 'index' ?>
                 <ul>
                     <li class="child">
                         <a class="title <?php if ($this->controller === 'index') echo 'selected'; ?>" href="/manual/index.html" title="首页">首页</a>
@@ -33,13 +34,7 @@
                                 <a class="title <?php if ($this->action === 'system-router') echo 'selected'; ?>" href="/manual/system-router.html">3.1&nbsp;路由</a>
                             </li>
                             <li>
-                                <a class="title <?php if ($this->action === 'system-events') echo 'selected'; ?>" href="/manual/config-events.html">2.2&nbsp;事务配置</a>
-                            </li>
-                            <li>
-                                <a class="title <?php if ($this->action === 'system-module') echo 'selected'; ?>" href="/manual/config-module.html">2.3&nbsp;模块配置</a>
-                            </li>
-                            <li>
-                                <a class="title <?php if ($this->action === 'system-others') echo 'selected'; ?>" href="/manual/config-others.html">2.4&nbsp;其他配置</a>
+                                <a class="title <?php if ($this->action === 'system-event') echo 'selected'; ?>" href="/manual/system-event.html">3.2&nbsp;事务管理器</a>
                             </li>
                         </ul>					
                     </li>

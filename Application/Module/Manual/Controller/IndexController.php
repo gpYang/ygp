@@ -16,6 +16,7 @@ class IndexController extends Controller {
     );
     
     function indexAction() {
+        return array_merge(array('action' => 'index-index'), $this->return);
         return $this->return;
     }
 
