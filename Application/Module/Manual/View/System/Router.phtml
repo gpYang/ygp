@@ -29,7 +29,7 @@
                     }
                 </div>
                 <p class="notice">需要注意的是如果在events.php中的match方法没有传入true参数,那么这个addrule就必须在route方法之前</p>
-                以上路由可匹配user/123/tom,匹配后在控制器使用getGet('id')得到id参数,getGet()得到id和name参数,不可匹配user/tom/123,如果所有规则的
+                以上路由可匹配user/123/tom,为防止变量污染,可控制器中getGet()获取匹配项的值,不可匹配user/tom/123,如果所有规则的
                 正则表达式相同,第三个参数可使用字符串,如下例
                 <div class="code">
                     $e->getRouter()->addRule(array('?module', '?controller', '?action'), '[:module]-[:controller]-[:action].html', '[a-z]+');
