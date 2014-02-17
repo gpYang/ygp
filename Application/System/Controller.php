@@ -22,16 +22,6 @@ abstract class Controller {
     protected $viewData = array();
 
     /**
-     * @var array 通过事件管理器加载的试图,用于控制
-     */
-    protected $eventView = array();
-
-    /**
-     * @var boolean 是否清除通过事件管理器加载的试图
-     */
-    protected $cleanView = false;
-
-    /**
      * @var object 事件管理器
      */
     protected $event = null;
@@ -40,7 +30,7 @@ abstract class Controller {
      * @var string layout模式开关/layout模板名
      */
     protected $layout = '';
-    
+
     /**
      * @var array route规则中的匹配值
      */
@@ -119,10 +109,10 @@ abstract class Controller {
      */
     private function setPath($path) {
         $routeMatch = $this->event->getRouter()->getRouteMatch();
+        $path = trim($path, '/');
         if ($path === '') {
             $path = array($routeMatch['module'], $routeMatch['controller']);
         } else {
-            $path = trim($path, '/');
             if (false !== strpos($path, '/')) {
                 $path = explode('/', $path);
             } else {
@@ -177,15 +167,6 @@ abstract class Controller {
     }
 
     /**
-     * 获取事务管理器
-     * 
-     * @return object
-     */
-    public function getEvent() {
-        return $this->event;
-    }
-
-    /**
      * 开启/关闭layout模式
      * 
      * @param string $layout 空为关闭layout,有值为layout模板文件名
@@ -202,17 +183,43 @@ abstract class Controller {
     public function getLayout() {
         return $this->layout;
     }
-    
+
+    /**
+     * 设置路由正则匹配数据
+     * 
+     * @param array $get 正则匹配数据
+     */
     public function setGet($get) {
         $this->get = $get;
     }
 
-
+    /**
+     * 获取路由正则匹配数据
+     * 
+     * @param string $name 数据名
+     * @return array|string
+     */
     protected function getGet($name = '') {
         if ($name) {
             return $this->get[$name];
         }
         return $this->get;
+    }
+
+    /**
+     * 获取事务管理器
+     * 
+     * @return object
+     */
+    protected function getEvent() {
+        return $this->event;
+    }
+
+    /**
+     * 清除加载过的视图
+     */
+    protected function cleanView() {
+        $this->viewData = array();
     }
 
 }

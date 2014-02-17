@@ -1,0 +1,25 @@
+<div id="gird">
+    <div class="inner">
+        <div class="book-title"><h1>3.4 逻辑层</h1></div>
+        <hr>
+        <div class="book-content">
+            <div>
+                逻辑层没啥好说的啦,就几个方法..复制粘贴啦.<br>
+                使用logic方法调用逻辑类,可调用其他模块下的逻辑类
+                <div class="code">
+                    $logic = $this->logic();<span class="note">//调用本身,本例中为Index/TestLogic</span><br>
+                    $logic = $this->logic('login/test');<span class="note">//调用Login/TestLogic</span>
+                </div>
+                调用模型类同调用逻辑类,方法名为model
+                <div class="code">
+                    $model = $this->model();<span class="note">//调用本模块下与控制器同名的模型类,本例中为Index/TestModel</span><br>
+                    $model = $this->model('login/test');<span class="note">//调用Login/TestModel</span>
+                </div>
+                使用getEvent方法得到事务管理器
+                <div class="code">
+                    $event = $this->getEvent();
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -94,4 +94,13 @@ abstract class Logic {
         return $data[$name];
     }
 
+    /**
+     * 获取事务管理器
+     * 
+     * @return object
+     */
+    protected function getEvent() {
+        return $this->event;
+    }
+
 }

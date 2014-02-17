@@ -33,12 +33,17 @@ class View {
      * @var array 视图展示数据
      */
     private $_data = array();
+    
+    /**
+     * @var boolean 视图是否已经被加载过
+     */
+    private $_included = false;
 
     /**
      * @var array 助手类
      */
     private static $_helper = array();
-
+    
     /**
      * 构造
      * 
@@ -134,10 +139,22 @@ class View {
      * 加载视图文件
      */
     public function includeView() {
-        if (!empty($this->_data)) {
-            extract($this->_data);
+        if (!$this->_included) {
+            $this->_included = true;
+            if (!empty($this->_data)) {
+                extract($this->_data);
+            }
+            include $this->_realPath;
         }
-        include $this->_realPath;
+    }
+
+    /**
+     * 获取视图数据
+     * 
+     * @return array
+     */
+    public function getData() {
+        return $this->_data;
     }
 
 }

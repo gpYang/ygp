@@ -234,6 +234,19 @@ class Router {
         }
         return true;
     }
+    
+    /**
+     * 获取路由正则匹配数据
+     * 
+     * @param string $name 数据名
+     * @return array|string
+     */
+    public function getRouteGrepResult($name = '') {
+        if ($name) {
+            return $this->_routeGrepResult[$name];
+        }
+        return $this->_routeGrepResult;
+    }
 
 }
 

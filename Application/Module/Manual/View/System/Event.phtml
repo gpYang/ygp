@@ -10,7 +10,28 @@
                 如何运转的,原本是把事务管理器做成监听者模式的,但考虑到这样需要在框架底层添加代码去派发事件,到项
                 目庞大的时候.底层和逻辑会混在一块,导致管理起来比较麻烦,为了实现底层与项目完全分离,将事务管理器做
                 成伪监听者模式,完全通过配置来控制执行顺序.<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;在事务管理器中,我们可以获得框架的所有核心(request数据处理器,loader加载器,router路由器,matchController匹配控制器...).
+                还可通过getEvents()方法获得所有运行过的事务
+                <h2>System/Event.php</h2>
+                <div class="code">
+                    public function route() {
+                    <p class="in_array">...<span class="note">//得到路由</span></p>
+                    }<br>
+
+                    public function match($reMatch) {
+                    <p class="in_array">...<span class="note">//匹配路由,$reMatch是判断是否需要重新匹配路由,当在route之后有新增路由规则的都必须为true</span></p>
+                    }<br>
+
+                    public function bootstrap() {
+                    <p class="in_array">...<span class="note">//引导,匹配到控制器中的操作,并新建视图</span></p>
+                    }<br>
+
+                    public function finish() {
+                    <p class="in_array">...<span class="note">//渲染</span></p>
+                    }<br>
+                    
+                </div>
+                以上4个方法必须实现,可自己实现也可按照框架实现,2种实现方法在前面章节已经说明,这里就不重复说了
             </div>
         </div>
     </div>

@@ -47,6 +47,11 @@ class Event {
     protected $loader = null;
 
     /**
+     * @var object request数据处理器
+     */
+    protected $request = null;
+
+    /**
      * 构造方法
      * 
      * @param array $systemObjects 系统类,统一由事务管理器管理
@@ -121,9 +126,14 @@ class Event {
         if ($matchAction !== false) {
             $layout = $this->matchController->getLayout();
             $common = '';
-            if ($layout) {
+            if (is_object($matchAction)) {
+                $view = $matchAction;
+                $matchAction = $view->getData();
+            } else {
                 $path = implode('/', $this->router->getRouteMatch());
                 $view = new View($path, '', $matchAction);
+            }
+            if ($layout) {
                 ob_start();
                 $view->includeView();
                 $content = ob_get_clean();
@@ -175,6 +185,15 @@ class Event {
      */
     public function getLoader() {
         return $this->loader;
+    }
+
+    /**
+     * 获取request数据处理器
+     * 
+     * @return object
+     */
+    public function getRequest() {
+        return $this->request;
     }
 
 }

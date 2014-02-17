@@ -16,6 +16,7 @@ class SystemController extends Controller {
     );
 
     public function indexAction() {
+//        return $this->view(array_merge(array('action' => 'system-index'), $this->return), 'manual/system/router');
         return array_merge(array('action' => 'system-index'), $this->return);
     }
 
@@ -27,8 +28,16 @@ class SystemController extends Controller {
         return array_merge(array('action' => 'system-event'), $this->return);
     }
 
-    public function moduleAction() {
-        return array_merge(array('action' => 'system-module'), $this->return);
+    public function controllerAction() {
+        return array_merge(array('action' => 'system-controller'), $this->return);
+    }
+    
+    public function logicAction() {
+        return array_merge(array('action' => 'system-logic'), $this->return);
+    }
+    
+    public function modelAction() {
+        return array_merge(array('action' => 'system-model'), $this->return);
     }
 
     public function othersAction() {

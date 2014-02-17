@@ -1,0 +1,28 @@
+<div id="gird">
+    <div class="inner">
+        <div class="book-title"><h1>3.5 模型层</h1></div>
+        <hr>
+        <div class="book-content">
+            <div>
+                框架中的控制器部署在模块下,以Model为后缀,前缀首字母需要大写,同一个模块下的控制器不能重名.
+                例如index模块下的test模型应该放置在Module/Index/TestModel,test即为模型名
+                <h2>Module/Index/Model/TestModel</h2>
+                namespace Index;<br>
+                use System\Model;
+
+                class IndexModel extends Model {
+
+                public function __construct() {
+                parent::__construct('writer', 'reader');
+                }
+
+                function get() {
+                return $this->from('a')->select();
+                }
+
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
