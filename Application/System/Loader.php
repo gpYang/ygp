@@ -17,7 +17,7 @@ class Loader {
     /**
      * @var array 已加载文件
      */
-    private static $_isLoad = array();
+    private $_isLoad = array();
 
     /**
      * @var array 系统文件路径
@@ -67,12 +67,12 @@ class Loader {
      * @return boolean
      */
     public function autoload($class) {
-        if (!isset(self::$_isLoad[$class])) {
+        if (!isset($this->_isLoad[$class])) {
             if (($file = $this->parseClass($class))) {
                 if (file_exists($file . PHP_EXT)) {
                     include $file . PHP_EXT;
                     if (class_exists($class) || interface_exists($class)) {
-                        self::$_isLoad[$class] = true;
+                        $this->_isLoad[$class] = true;
                         return true;
                     }
                 }
@@ -116,7 +116,7 @@ class Loader {
      * @return array
      */
     public static function getIsLoad() {
-        return static::$_isLoad;
+        return $this->_isLoad;
     }
 
 }

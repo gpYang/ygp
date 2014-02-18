@@ -56,28 +56,6 @@ abstract class Controller {
     }
 
     /**
-     * 加载逻辑类(通过path获取其他模块逻辑)
-     * 
-     * @param string $path 逻辑路径
-     * @return object
-     */
-    protected function logic($path = '') {
-        $path = $this->setPath($path);
-        return $this->getFileByPath($path, 'logicData', 'Logic');
-    }
-
-    /**
-     * 加载模型类(通过path获取其他模块模型)
-     * 
-     * @param string $path 模型路径
-     * @return object
-     */
-    protected function model($path = '') {
-        $path = $this->setPath($path);
-        return $this->getFileByPath($path, 'modelData', 'Model');
-    }
-
-    /**
      * 加载视图文件(通过path获取其他模块模型,common获取公共视图)
      * 
      * @param array $data 视图需要展示数据
@@ -99,49 +77,6 @@ abstract class Controller {
         foreach ($this->viewData as $value) {
             $value->includeView();
         }
-    }
-
-    /**
-     * 通过uri设置路径
-     * 
-     * @param stirng $path uri
-     * @return string
-     */
-    private function setPath($path) {
-        $routeMatch = $this->event->getRouter()->getRouteMatch();
-        $path = trim($path, '/');
-        if ($path === '') {
-            $path = array($routeMatch['module'], $routeMatch['controller']);
-        } else {
-            if (false !== strpos($path, '/')) {
-                $path = explode('/', $path);
-            } else {
-                $path = array($routeMatch['module'], $path);
-            }
-        }
-        return $path;
-    }
-
-    /**
-     * 通过路径获取对象
-     * 
-     * @param string $path 路径
-     * @param string $dataName 数据名
-     * @param string $block 模块
-     * @return object
-     */
-    private function getFileByPath($path, $dataName, $block) {
-        $name = implode('/', $path);
-        if (!isset(self::${$dataName}[$name])) {
-            $realPath = PATH_MODULE . '/' . ucfirst($path[0]) . '/' . $block . '/' . ucfirst($path[1]) . $block . PHP_EXT;
-            $realName = ucfirst($path[0]) . '\\' . ucfirst($path[1]) . $block;
-            if (!file_exists($realPath)) {
-                thrower(sprintf('无法找到对应%s文件'), $block === 'Logic' ? '逻辑' : '模型');
-            }
-            include $realPath;
-            self::${$dataName}[$name] = new $realName($this->event);
-        }
-        return self::${$dataName}[$name];
     }
 
     /**
@@ -194,6 +129,28 @@ abstract class Controller {
     }
 
     /**
+     * 加载逻辑类(通过path获取其他模块逻辑)
+     * 
+     * @param string $path 逻辑路径
+     * @return object
+     */
+    protected function logic($path = '') {
+        $path = $this->setPath($path);
+        return $this->getFileByPath($path, 'logicData', 'Logic');
+    }
+
+    /**
+     * 加载模型类(通过path获取其他模块模型)
+     * 
+     * @param string $path 模型路径
+     * @return object
+     */
+    protected function model($path = '') {
+        $path = $this->setPath($path);
+        return $this->getFileByPath($path, 'modelData', 'Model');
+    }
+
+    /**
      * 获取路由正则匹配数据
      * 
      * @param string $name 数据名
@@ -220,6 +177,49 @@ abstract class Controller {
      */
     protected function cleanView() {
         $this->viewData = array();
+    }
+
+    /**
+     * 通过uri设置路径
+     * 
+     * @param stirng $path uri
+     * @return string
+     */
+    private function setPath($path) {
+        $routeMatch = $this->event->getRouter()->getRouteMatch();
+        $path = trim($path, '/');
+        if ($path === '') {
+            $path = array($routeMatch['module'], $routeMatch['controller']);
+        } else {
+            if (false !== strpos($path, '/')) {
+                $path = explode('/', $path);
+            } else {
+                $path = array($routeMatch['module'], $path);
+            }
+        }
+        return $path;
+    }
+
+    /**
+     * 通过路径获取对象
+     * 
+     * @param string $path 路径
+     * @param string $dataName 数据名
+     * @param string $block 模块
+     * @return object
+     */
+    private function getFileByPath($path, $dataName, $block) {
+        $name = implode('/', $path);
+        if (!isset(self::${$dataName}[$name])) {
+            $realPath = PATH_MODULE . '/' . ucfirst($path[0]) . '/' . $block . '/' . ucfirst($path[1]) . $block . PHP_EXT;
+            $realName = ucfirst($path[0]) . '\\' . ucfirst($path[1]) . $block;
+            if (!file_exists($realPath)) {
+                thrower(sprintf('无法找到对应%s文件'), $block === 'Logic' ? '逻辑' : '模型');
+            }
+            include $realPath;
+            self::${$dataName}[$name] = new $realName($this->event);
+        }
+        return self::${$dataName}[$name];
     }
 
 }

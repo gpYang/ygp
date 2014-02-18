@@ -122,7 +122,7 @@ class Db {
     public function setScheme($key) {
         if (!isset(static::$_scheme[$key])) {
             if (!isset(static::$_dbConfigs[$key])) {
-                $this->throweError(sprintf('无法找到%s对应的数据库配置', $key));
+                $this->throwError(sprintf('无法找到%s对应的数据库配置', $key));
             }
             $driver = '\Library\Db\Driver\\' . static::$_dbConfigs[$key]['driver'];
             static::$_scheme[$key] = new $driver(static::$_dbConfigs[$key]);
@@ -394,7 +394,7 @@ class Db {
         if ($select === '') {
             foreach ($data as $insert) {
                 if (array_diff($fields, array_keys($insert)) || array_diff(array_keys($insert), $fields)) {
-                    $this->throweError('插入键值必须一一对应');
+                    $this->throwError('插入键值必须一一对应');
                 }
                 $set[] = sprintf("('%s')", implode("','", $insert));
             }
@@ -498,6 +498,111 @@ class Db {
             $this->_adapter->free_result($rs);
         }
         return $re;
+    }
+
+    /**
+     * 获取是否有错误
+     * 
+     * @return boolean
+     */
+    public function hasError() {
+        return $this->_error['error'];
+    }
+
+    /**
+     * 获取错误信息
+     * 
+     * @return array
+     */
+    public function getError() {
+        return array(
+            'code' => $this->_error['code'],
+            'message' => $this->_error['message']
+        );
+    }
+
+    /**
+     * 获取最后一条sql语句
+     * 
+     * @return string
+     */
+    public function getLastSql() {
+        return $this->_lastSql;
+    }
+
+    /**
+     * 获取最后插入id
+     * 
+     * @return string
+     */
+    public function getInsertId() {
+        return $this->_insertId;
+    }
+
+    /**
+     * 执行sql语句
+     * 
+     * @param string $sql sql语句
+     * @param boolean $toArray 是否转为数组
+     * @return array|object
+     */
+    public function query($sql, $toArray = false) {
+        if (!$this->_adapter) {
+            $this->setScheme($this->_defaultScheme);
+        }
+        $sql = $this->replacePre($sql);
+        $this->_lastSql = $sql;
+        $isDebug = Debug::check();
+        $isDebug && Debug::setSql($sql);
+        $rs = $this->_adapter->query($sql);
+        $this->setError();
+        $isDebug && Debug::getTime();
+        if (true === $toArray) {
+            $rs = $this->toArray($rs);
+        }
+        if ($this->_reset) {
+            $this->reset();
+        }
+        return $rs;
+    }
+
+    /**
+     * 开启事务
+     */
+    public function begin() {
+        $this->query('BEGIN');
+    }
+
+    /**
+     * 回滚
+     */
+    public function rollback() {
+        $this->query('ROLLBACK');
+    }
+
+    /**
+     * 提交
+     */
+    public function commit() {
+        $this->query('COMMIT');
+    }
+
+    /**
+     * 获取sql版本
+     * 
+     * @return string
+     */
+    public function getServerInfo() {
+        return $this->_adapter->version();
+    }
+
+    /**
+     * 抛出异常方法,便于移植
+     * 
+     * @param string $errorString 错误信息
+     */
+    public function throwError($errorString) {
+        thrower($errorString);
     }
 
     /**
@@ -751,111 +856,6 @@ class Db {
             'code' => $this->_adapter->errno(),
             'message' => $this->_adapter->error()
         );
-    }
-
-    /**
-     * 获取是否有错误
-     * 
-     * @return boolean
-     */
-    public function hasError() {
-        return $this->_error['error'];
-    }
-
-    /**
-     * 获取错误信息
-     * 
-     * @return array
-     */
-    public function getError() {
-        return array(
-            'code' => $this->_error['code'],
-            'message' => $this->_error['message']
-        );
-    }
-
-    /**
-     * 获取最后一条sql语句
-     * 
-     * @return string
-     */
-    public function getLastSql() {
-        return $this->_lastSql;
-    }
-
-    /**
-     * 获取最后插入id
-     * 
-     * @return string
-     */
-    public function getInsertId() {
-        return $this->_insertId;
-    }
-
-    /**
-     * 执行sql语句
-     * 
-     * @param string $sql sql语句
-     * @param boolean $toArray 是否转为数组
-     * @return array|object
-     */
-    public function query($sql, $toArray = false) {
-        if (!$this->_adapter) {
-            $this->setScheme($this->_defaultScheme);
-        }
-        $sql = $this->replacePre($sql);
-        $this->_lastSql = $sql;
-        $isDebug = Debug::check();
-        $isDebug && Debug::setSql($sql);
-        $rs = $this->_adapter->query($sql);
-        $this->setError();
-        $isDebug && Debug::getTime();
-        if (true === $toArray) {
-            $rs = $this->toArray($rs);
-        }
-        if ($this->_reset) {
-            $this->reset();
-        }
-        return $rs;
-    }
-
-    /**
-     * 开启事务
-     */
-    public function begin() {
-        $this->query('BEGIN');
-    }
-
-    /**
-     * 回滚
-     */
-    public function rollback() {
-        $this->query('ROLLBACK');
-    }
-
-    /**
-     * 提交
-     */
-    public function commit() {
-        $this->query('COMMIT');
-    }
-
-    /**
-     * 获取sql版本
-     * 
-     * @return string
-     */
-    public function get_server_info() {
-        return $this->_adapter->version();
-    }
-
-    /**
-     * 抛出异常方法,便于移植
-     * 
-     * @param string $errorString 错误信息
-     */
-    public function throweError($errorString) {
-        thrower($errorString);
     }
 
 }

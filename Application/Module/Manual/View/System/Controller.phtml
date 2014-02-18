@@ -4,9 +4,9 @@
         <hr>
         <div class="book-content">
             <div>
-                框架中的控制器部署在模块下,以Controller为后缀,前缀首字母需要大写,同一个模块下的控制器不能重名.
+                框架中模型层的部署格式是Module/[:Module]/Controller/[:Controller]Controller,同一个模块下的逻辑类不能重名.
                 例如index模块下的test控制器应该放置在Module/Index/TestController,test即为控制器名
-                <h2>Module/Index/Controller/TestController</h2>
+                <h2>Module/Index/Controller/TestController.php</h2>
                 <div class="code">
                     namespace Index;<br>
                     use System\Controller;<br>
@@ -87,7 +87,7 @@
                     $this->getGet();<span class="note">//返回数组,id=>123,name=>tom</span><br>
                     $this->getGet('id');<span class="note">//返回字符串123</span>
                 </div>
-                使用layout方法开启或关闭layout模式,layout模式后面我们在<a href="manual/system-view.phtml">3.6 视图</a>中说明
+                使用layout方法开启或关闭layout模式,layout模式后面我们在<a href="manual/system-view.phtml">3.6 视图层</a>中说明
                 <div class="code">
                     $this->layout();<span class="note">//关闭layout模式,可随意加载视图</span><br>
                     $this->layout('layout');<span class="note">//开启layout模式,并指定layout视图为Layout/Layout.phtml</span><br>

@@ -53,6 +53,15 @@ abstract class Logic {
     }
 
     /**
+     * 获取事务管理器
+     * 
+     * @return object
+     */
+    protected function getEvent() {
+        return $this->event;
+    }
+
+    /**
      * 通过url设置路径
      */
     private function setPath($path) {
@@ -92,15 +101,6 @@ abstract class Logic {
             Controller::setStatic($dataName, $data);
         }
         return $data[$name];
-    }
-
-    /**
-     * 获取事务管理器
-     * 
-     * @return object
-     */
-    protected function getEvent() {
-        return $this->event;
     }
 
 }

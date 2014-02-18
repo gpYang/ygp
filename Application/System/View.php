@@ -33,7 +33,7 @@ class View {
      * @var array 视图展示数据
      */
     private $_data = array();
-    
+
     /**
      * @var boolean 视图是否已经被加载过
      */
@@ -43,7 +43,7 @@ class View {
      * @var array 助手类
      */
     private static $_helper = array();
-    
+
     /**
      * 构造
      * 
@@ -58,69 +58,6 @@ class View {
         $this->setRootPath($common);
         $this->setRealPath($path);
         $this->getView($data);
-    }
-
-    /**
-     * 设置根路径
-     * 
-     * @param string $common 公共模块名
-     */
-    public function setRootPath($common) {
-        if (empty($common)) {
-            $this->_rootPath = PATH_MODULE;
-            $this->_common = false;
-        } else {
-            $this->_rootPath = PATH_TEMPLATES . '/' . ucfirst($common);
-            $this->_common = true;
-        }
-    }
-
-    /**
-     * 设置真实路径
-     * 
-     * @param string $path 路径
-     */
-    public function setRealPath($path) {
-        if ($this->_common === false) {
-            $path = explode('/', $path);
-            $this->_realPath = $this->_rootPath . '/' . ucfirst($path[0]) . '/View/' . ucfirst($path[1]) . '/' . ucfirst($path[2]) . HTML_EXT;
-        } else {
-            $this->_realPath = $this->_rootPath . '/' . ucfirst($path) . HTML_EXT;
-        }
-    }
-
-    /**
-     * 得到视图文件
-     * 
-     * @param array $data 数据
-     */
-    public function getView($data) {
-        if (file_exists($this->_realPath)) {
-            if (isset($data) && is_array($data)) {
-                $this->_data = $data;
-                foreach ($data as $key => $value) {
-                    $this->$key = $value;
-                }
-            }
-        }
-    }
-
-    /**
-     *  魔术方法 加载助手
-     * 
-     * @param string $name 方法名
-     * @param array $argument 参数
-     * @return mixed
-     */
-    public function __call($name, $argument) {
-        $name = ucfirst($name);
-        if (in_array($name, static::$_helper)) {
-            $helperClass = '\Helper\\' . $name;
-            if (class_exists($helperClass)) {
-                $helper = new $helperClass;
-                return call_user_func_array($helper, $argument);
-            }
-        }
     }
 
     /**
@@ -155,6 +92,69 @@ class View {
      */
     public function getData() {
         return $this->_data;
+    }
+
+    /**
+     *  魔术方法 加载助手
+     * 
+     * @param string $name 方法名
+     * @param array $argument 参数
+     * @return mixed
+     */
+    protected function __call($name, $argument) {
+        $name = ucfirst($name);
+        if (in_array($name, static::$_helper)) {
+            $helperClass = '\Helper\\' . $name;
+            if (class_exists($helperClass)) {
+                $helper = new $helperClass;
+                return call_user_func_array($helper, $argument);
+            }
+        }
+    }
+
+    /**
+     * 设置根路径
+     * 
+     * @param string $common 公共模块名
+     */
+    private function setRootPath($common) {
+        if (empty($common)) {
+            $this->_rootPath = PATH_MODULE;
+            $this->_common = false;
+        } else {
+            $this->_rootPath = PATH_TEMPLATES . '/' . ucfirst($common);
+            $this->_common = true;
+        }
+    }
+
+    /**
+     * 设置真实路径
+     * 
+     * @param string $path 路径
+     */
+    private function setRealPath($path) {
+        if ($this->_common === false) {
+            $path = explode('/', $path);
+            $this->_realPath = $this->_rootPath . '/' . ucfirst($path[0]) . '/View/' . ucfirst($path[1]) . '/' . ucfirst($path[2]) . HTML_EXT;
+        } else {
+            $this->_realPath = $this->_rootPath . '/' . ucfirst($path) . HTML_EXT;
+        }
+    }
+
+    /**
+     * 得到视图文件
+     * 
+     * @param array $data 数据
+     */
+    private function getView($data) {
+        if (file_exists($this->_realPath)) {
+            if (isset($data) && is_array($data)) {
+                $this->_data = $data;
+                foreach ($data as $key => $value) {
+                    $this->$key = $value;
+                }
+            }
+        }
     }
 
 }

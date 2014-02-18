@@ -95,7 +95,16 @@ class Log {
             return true;
         }
         return false;
-//        thrower('无法创建日志目录');
+//        $this->throwError('无法创建日志目录');
+    }
+
+    /**
+     * 抛出异常方法,便于移植
+     * 
+     * @param string $errorString 错误信息
+     */
+    public function throwError($errorString) {
+        thrower($errorString);
     }
 
 }

@@ -1,0 +1,68 @@
+<div id="gird">
+    <div class="inner">
+        <div class="book-title"><h1>3.6 视图层</h1></div>
+        <hr>
+        <div class="book-content">
+            <div>
+                框架中视图层的部署格式是Module/[:Module]/View/[:Controller]/[:Action],同一个控制器下的视图不能重名.如果在控制器中
+                <div class="code">
+                    namespace Index;<br>
+                    use System\Controller;<br>
+                    class TestController extends Controller {
+                    <div class="in_array">
+                        public function testAction() {<br>
+                        <div class="in_array">
+                            return array(
+                            <p class="in_array">
+                                'name' => 'tom',
+                            </p>
+                            );
+                        </div>
+                        }<br>
+                    </div>
+                    }
+                </div>
+                视图文件中可以直接调用name参数
+                <h2>Module/Index/View/Test/Test.phtml</h2>
+                <div class="code">
+                    hello echo $this->name;<span class="note">//hello tom</span><br>
+                    hello echo $name;<span class="note">//hello tom</span>
+                </div>
+                ------------------------------------------------------------------------------------------------------------------------------------------<br>
+                如果控制器代码改为
+                <div class="code">
+                    public function testAction() {<br>
+                    <div class="in_array">
+                        $this->layout('layout');<span class="note">开启layout模式</span><br>
+                        return array(
+                        <p class="in_array">
+                            'name' => 'tom',
+                        </p>
+                        );
+                    </div>
+                    }
+                </div>
+                <h2>View/Layout/Layout.phtml</h2>
+                <div class="code">
+                    this is header!!<br>
+                    echo $this->content;<br>
+                    this is footer!!
+                </div>
+                出来的页面会显示<br>
+                this is header!!<br>
+                hello tom<br>
+                this is footer!!<br>
+                在视图中我们还能随意再加载任意视图
+                <div class="code">
+                    $this->view(array('name' => 'james', 'index/index/index'));
+                </div>
+                视图中,我们还能使用视图助手加载静态文件(因为我暂时就写了一个助手类,当然可以自己加)
+                <div class="code">
+                    img src="echo $this->staticFile('Image', 'test.jpg')"
+                </div>
+                助手类添加使用__invoke函数,部署在Helper目录下,在config.php的helper下添加配置,然后像上例中一样,
+                echo $this->helper就可以使用了...helper的首字母不需要大写
+            </div>
+        </div>
+    </div>
+</div>

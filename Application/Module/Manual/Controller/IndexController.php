@@ -14,7 +14,7 @@ class IndexController extends Controller {
     private $return = array(
         'controller' => 'index',
     );
-    
+
     function indexAction() {
         return array_merge(array('action' => 'index-index'), $this->return);
         return $this->return;

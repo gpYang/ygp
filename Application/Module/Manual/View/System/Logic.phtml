@@ -5,6 +5,8 @@
         <div class="book-content">
             <div>
                 逻辑层没啥好说的啦,就几个方法..复制粘贴啦.<br>
+                框架中逻辑层的部署格式是Module/[:Module]/Logic/[:Controller]Logic,同一个模块下的逻辑类不能重名.
+                例如index模块下的test逻辑类应该为Module/Index/TestLogic,test即为逻辑名<br>
                 使用logic方法调用逻辑类,可调用其他模块下的逻辑类
                 <div class="code">
                     $logic = $this->logic();<span class="note">//调用本身,本例中为Index/TestLogic</span><br>

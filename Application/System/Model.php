@@ -37,7 +37,7 @@ abstract class Model {
      * @param string $writer 主库
      * @param string $reader 从库
      */
-    public function __construct($writer = 'writer', $reader = 'reader') {
+    protected function __construct($writer = 'writer', $reader = 'reader') {
         $this->db = new Db($writer, $reader);
     }
 
@@ -65,7 +65,7 @@ abstract class Model {
      * @param array $argument 参数
      * @return mixed
      */
-    public function __call($name, $argument) {
+    protected function __call($name, $argument) {
         if (method_exists($this->db, $name)) {
             return call_user_func_array(array($this->db, $name), $argument);
         }

@@ -9,19 +9,19 @@ namespace Manual;
 
 use System\Controller;
 
-class SystemController extends Controller {
+class LibraryController extends Controller {
 
     private $return = array(
-        'controller' => 'system',
+        'controller' => 'library',
     );
 
     public function indexAction() {
 //        return $this->view(array_merge(array('action' => 'system-index'), $this->return), 'manual/system/router');
-        return array_merge(array('action' => 'system-index'), $this->return);
+        return array_merge(array('action' => 'library-index'), $this->return);
     }
 
-    public function routerAction() {
-        return array_merge(array('action' => 'system-router'), $this->return);
+    public function dbAction() {
+        return array_merge(array('action' => 'library-db'), $this->return);
     }
 
     public function eventAction() {

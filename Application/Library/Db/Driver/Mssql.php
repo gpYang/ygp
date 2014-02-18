@@ -30,11 +30,11 @@ final class Mysql extends DbDriver implements DriverInterface {
     public function connect() {
         if ($this->pconnect) {
             if (!$this->link = @mssql_pconnect($this->hostname, $this->username, $this->password)) {
-                thrower("Can not connect to MySQL server");
+                $this->throwError("Can not connect to MySQL server");
             }
         } else {
             if (!$this->link = @mssql_connect($this->hostname, $this->username, $this->password)) {
-                thrower("Can not connect to MySQL server");
+                $this->throwError("Can not connect to MySQL server");
             }
         }
         if ($this->version() > "4.1") {
@@ -55,7 +55,7 @@ final class Mysql extends DbDriver implements DriverInterface {
      */
     public function select_db($dbname) {
         if (!$rs = mssql_select_db($dbname, $this->link)) {
-            thrower('链接数据库失败,数据库名:' . $dbname);
+            $this->throwError('链接数据库失败,数据库名:' . $dbname);
         }
         return $rs;
     }
@@ -166,7 +166,7 @@ final class Mysql extends DbDriver implements DriverInterface {
      * @return array 
      */
     public function fetch_row($resource) {
-        return  mssql_fetch_row($resource);
+        return mssql_fetch_row($resource);
     }
 
     /**
@@ -195,6 +195,15 @@ final class Mysql extends DbDriver implements DriverInterface {
      */
     public function close() {
         return mssql_close($this->link);
+    }
+
+    /**
+     * 抛出异常方法,便于移植
+     * 
+     * @param string $errorString 错误信息
+     */
+    public function throwError($errorString) {
+        thrower($errorString);
     }
 
 }

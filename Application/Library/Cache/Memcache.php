@@ -83,14 +83,14 @@ class Memcache implements CacheInterface {
      */
     private function connect() {
         if (!class_exists('Memcache') || !function_exists('memcache_connect')) {
-            thrower('无法加载memcahce扩展');
+            $this->throwError('无法加载memcahce扩展');
         }
         $handle = new \Memcache;
         empty($this->_memcacheConfig) && $this->_memcacheConfig = config('memcache');
 
         $handle->connect($this->_memcacheConfig['host'], $this->_memcacheConfig['port']);
         if (!$handle->getServerStatus($this->_memcacheConfig['host'], $this->_memcacheConfig['port'])) {
-            thrower('memcache服务器无法连接');
+            $this->throwError('memcache服务器无法连接');
         }
         return $handle;
     }
@@ -379,6 +379,15 @@ class Memcache implements CacheInterface {
             }
         }
         return true;
+    }
+
+    /**
+     * 抛出异常方法,便于移植
+     * 
+     * @param string $errorString 错误信息
+     */
+    public function throwError($errorString) {
+        thrower($errorString);
     }
 
 }

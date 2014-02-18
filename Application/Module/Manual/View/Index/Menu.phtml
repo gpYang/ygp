@@ -11,7 +11,7 @@
                         <a class="title <?php if ($this->controller === 'start') echo 'selected'; ?>" href="/manual/start.html" title="入门">第1章&nbsp;入门</a>
                     </li>	
                     <li class="<?php if ($this->controller === 'config') echo 'show'; ?> child">
-                        <a class="title <?php if ($this->action === 'config-index') echo 'selected'; ?>" href="/manual/config.html" title="入门">第2章&nbsp;配置</a>
+                        <a class="title <?php if ($this->action === 'config-index') echo 'selected'; ?>" href="/manual/config.html" title="配置">第2章&nbsp;配置</a>
                         <ul>
                             <li>
                                 <a class="title <?php if ($this->action === 'config-global') echo 'selected'; ?>" href="/manual/config-global.html">2.1&nbsp;全局配置</a>
@@ -28,7 +28,7 @@
                         </ul>					
                     </li>
                     <li class="<?php if ($this->controller === 'system') echo 'show'; ?> child">
-                        <a class="title <?php if ($this->action === 'system-index') echo 'selected'; ?>" href="/manual/system.html" title="入门">第3章&nbsp;系统核心</a>
+                        <a class="title <?php if ($this->action === 'system-index') echo 'selected'; ?>" href="/manual/system.html" title="系统核心">第3章&nbsp;系统核心</a>
                         <ul>
                             <li>
                                 <a class="title <?php if ($this->action === 'system-router') echo 'selected'; ?>" href="/manual/system-router.html">3.1&nbsp;路由</a>
@@ -44,6 +44,17 @@
                             </li>
                             <li>
                                 <a class="title <?php if ($this->action === 'system-model') echo 'selected'; ?>" href="/manual/system-model.html">3.5&nbsp;模型层</a>
+                            </li>
+                            <li>
+                                <a class="title <?php if ($this->action === 'system-view') echo 'selected'; ?>" href="/manual/system-view.html">3.6&nbsp;视图层</a>
+                            </li>
+                        </ul>					
+                    </li>
+                    <li class="<?php if ($this->controller === 'library') echo 'show'; ?> child">
+                        <a class="title <?php if ($this->action === 'library-index') echo 'selected'; ?>" href="/manual/library.html" title="类库">第4章&nbsp;类库和函数</a>
+                        <ul>
+                            <li>
+                                <a class="title <?php if ($this->action === 'library-db') echo 'selected'; ?>" href="/manual/library-db.html">4.1&nbsp;db类</a>
                             </li>
                         </ul>					
                     </li>
