@@ -232,7 +232,13 @@ class Db {
      * @return \Library\Db\Db
      */
     public function order($order) {
-        $this->_order[] = $order;
+        if (is_array($order)) {
+            foreach ($order as $value) {
+                $this->_order[] = $value;
+            }
+        } else {
+            $this->_order[] = $order;
+        }
         return $this;
     }
 
@@ -274,7 +280,7 @@ class Db {
      * 
      * @return int|false
      */
-    public function count($field = null) {
+    public function count($field = '*') {
         $this->autoScheme($this->_reader);
         $queryFrom = $this->parseFrom();
         $queryJoin = $this->parseJoin();
@@ -282,11 +288,6 @@ class Db {
         $queryGroup = $this->parseGroup();
         $queryHaving = $this->parseWhere('_having');
         $table = is_array($this->_from) ? current($this->_from) : $this->_from;
-        if (!isset($field)) {
-            if (!($field = $this->findKey($table))) {
-                $field = '*';
-            }
-        }
         if (!empty($queryJoin)) {
             $field = ('`' . (is_array($this->_from) ? key($this->_from) : $this->_from) . '`.') . $field;
         }
@@ -656,7 +657,7 @@ class Db {
             } else {
                 foreach ($this->_columns as $as => $column) {
                     if (is_int($as)) {
-                        $columns .= sprintf('`%s`,', $column);
+                        $columns .= sprintf('`%s`, ', $column);
                     } else {
                         if (false !== strpos($column, '.')) {
                             $ex = explode('.', $column);
@@ -664,10 +665,10 @@ class Db {
                         } else {
                             $column = sprintf('`%s`', $column);
                         }
-                        $columns .= sprintf('%s AS `$s`,', $column, $as);
+                        $columns .= sprintf('%s AS `%s`, ', $column, $as);
                     }
                 }
-                $columns = substr($columns, 0, -1);
+                $columns = substr(rtrim($columns), 0, -1);
             }
         }
         return $columns;
@@ -681,50 +682,54 @@ class Db {
         $joinTable = '';
         if (!empty($this->_join)) {
             if ($columns !== null) {
-                $currentCols = explode(',', $columns);
-                $columns = sprintf('`%s`.%s', $this->_table, implode(sprintf(',`%s`.', $this->_table), $currentCols));
+                $currentCols = explode(',', str_replace(', ', ',', $columns));
+                $columns = sprintf('`%s`.%s', $this->_table, implode(sprintf(', `%s`.', $this->_table), $currentCols));
             }
             foreach ($this->_join as $joins) {
                 $table = array();
-                if (is_array($joins['join'])) {
-                    $join .= ' ' . $joins['type'] . ' ';
-                    $key = key($joins['join']);
-                    $join .= is_int($key) ?
-                            '`' . $this->_pre . current($joins['join']) . '`' :
-                            sprintf('`%s` AS `%s`', ($this->_pre . current($joins['join'])), $key);
-                    $joinTable = is_int($key) ? $this->_pre . $joins['join'] : $key;
-                    $on = explode('=', $joins['condition']);
-                    foreach ($on as $value) {
-                        if (strpos($value, '.')) {
-                            $ex = explode('.', $value);
-                            $table[] = sprintf('`%s`.`%s`', $ex[0], $ex[1]);
-                        }
+                !is_array($joins['join']) && $joins['join'] = array($joins['join'] => $joins['join']);
+                $join .= ' ' . $joins['type'] . ' ';
+                $key = key($joins['join']);
+                $currentJoin = current($joins['join']);
+                if (is_int($key)) {
+                    $join .='`' . $this->_pre . $currentJoin . '`';
+                    $joinTable = $this->_pre . $currentJoin;
+                } else {
+                    $join .= sprintf('`%s` AS `%s`', ($this->_pre . $currentJoin), $key);
+                    $joinTable = $key;
+                }
+                $on = explode('=', $joins['condition']);
+                foreach ($on as $value) {
+                    $value = trim($value);
+                    if (strpos($value, '.')) {
+                        $ex = explode('.', $value);
+                        $table[] = sprintf('`%s`.`%s`', $ex[0], $ex[1]);
+                    } else {
+                        $table[] = sprintf('`%s`.`%s`', $currentJoin, $value);
                     }
-                    $join .= sprintf(' ON %s = %s', $table[0], $table[1]);
-                    if (null !== $columns) {
-                        if ($joins['columns'] === '*') {
-                            $columns .= ',`' . $joinTable . '`.' . $joins['columns'];
+                }
+                $join .= sprintf(' ON %s = %s', $table[0], $table[1]);
+                if (null !== $columns) {
+                    if ($joins['columns'] === '*') {
+                        $columns .= ',`' . $joinTable . '`.' . $joins['columns'];
+                    } else {
+                        if (is_array($joins['columns'])) {
+                            foreach ($joins['columns'] as $as => $column) {
+                                $columns .= is_int($as) ?
+                                        sprintf(', `%s`.%s', $joinTable, $column) :
+                                        sprintf(', `%s`.`%s` AS `%s`', $joinTable, $column, $as);
+                            }
                         } else {
-                            if (is_array($joins['columns'])) {
-                                foreach ($joins['columns'] as $as => $column) {
-                                    $columns .= is_int($as) ?
-                                            sprintf(',`%s`.%s', $joinTable, $column) :
-                                            sprintf(',`%s`.`%s` AS `%s`', $joinTable, $column, $as);
+                            if (strpos($joins['columns'], ',')) {
+                                $exColumns = explode(',', $joins['columns']);
+                                foreach ($exColumns as $column) {
+                                    $columns .= sprintf(', `%s`.`%s`', $joinTable, trim($column));
                                 }
                             } else {
-                                if (strpos($joins['columns'], ',')) {
-                                    $exColumns = explode(',', $joins['columns']);
-                                    foreach ($exColumns as $column) {
-                                        $columns .= sprintf(',`%s`.`%s`', $joinTable, $column);
-                                    }
-                                } else {
-                                    $columns .= sprintf(',`%s`.`%s`', $joinTable, $joins['columns']);
-                                }
+                                $columns .= sprintf(', `%s`.`%s`', $joinTable, $joins['columns']);
                             }
                         }
                     }
-                } else {
-                    $join .= ' ' . $joins['join'];
                 }
             }
         }
@@ -760,9 +765,13 @@ class Db {
                             } else {
                                 $key = '`' . $key . '`';
                             }
-                            $currentWhere .= $key . (is_array($value) ?
-                                            (sprintf(" IN ('%s')", implode("','", $value))) :
-                                            (sprintf(" = '%s'", $value)));
+                            if (is_array($value)) {
+                                $currentWhere .= $key . sprintf(" IN ('%s')", implode("', '", $value));
+                            } else if (null === $value) {
+                                $currentWhere .= $key . ' IS NULL';
+                            } else {
+                                $currentWhere .= $key . sprintf(" = '%s'", $value);
+                            }
                         }
                     }
                 }
@@ -800,29 +809,29 @@ class Db {
      * 解析order语句
      */
     private function parseOrder() {
-        $order = '';
         if (!empty($this->_order)) {
-            $order .= ' ORDER BY ';
-            foreach ($this->_order as $key => $value) {
-                if (false !== strpos($value, ' ')) {
-                    $ex = explode(' ', $value);
-                    $value = array($ex[0] => $ex[1]);
+            $orderArr = array();
+            foreach ($this->_order as $sort => $index) {
+                if (false !== strpos($index, ' ')) {
+                    $ex = explode(' ', $index);
+                    $index = array($ex[0] => $ex[1]);
                 }
-                if (is_array($value)) {
-                    $zoom = key($value);
-                    $key = $value[$zoom];
-                    $value = $zoom;
+                if (is_array($index)) {
+                    $zoom = key($index);
+                    $sort = $index[$zoom];
+                    $index = $zoom;
                 }
-                if (strpos($value, '.')) {
-                    $ex = explode('.', $value);
-                    $value = sprintf('`%s`.`%s`', $ex[0], $ex[1]);
+                if (strpos($index, '.')) {
+                    $ex = explode('.', $index);
+                    $index = sprintf(' `%s`.`%s`', $ex[0], $ex[1]);
                 } else {
-                    $value = '`' . $value . '`';
+                    $index = ' `' . $index . '`';
                 }
-                $order .= is_int($key) ? $value : ($value . ' ' . $key);
+                $orderArr[] = is_int($sort) ? $index : ($index . ' ' . $sort);
             }
+            return ' ORDER BY' . implode(',', $orderArr);
         }
-        return $order;
+        return '';
     }
 
     /**

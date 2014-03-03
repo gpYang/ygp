@@ -65,7 +65,7 @@ abstract class Model {
      * @param array $argument 参数
      * @return mixed
      */
-    protected function __call($name, $argument) {
+    public function __call($name, $argument) {
         if (method_exists($this->db, $name)) {
             return call_user_func_array(array($this->db, $name), $argument);
         }

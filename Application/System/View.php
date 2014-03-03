@@ -101,7 +101,7 @@ class View {
      * @param array $argument 参数
      * @return mixed
      */
-    protected function __call($name, $argument) {
+    public function __call($name, $argument) {
         $name = ucfirst($name);
         if (in_array($name, static::$_helper)) {
             $helperClass = '\Helper\\' . $name;
