@@ -40,6 +40,13 @@
                     $from->order('id DESC');
                     $from->order(array('name ASC', 'age DESC'));
                 </div>
+                <h3>limit() & offset():</h3>
+                <div class="code">
+                    $from->limit(5);<span class="note">//limit 5</span><br>
+                    $from->offset(10);<span class="note">//offset 10</span><br>
+                    $from->limit('5, 10');<span class="note">//limit 5, 10</span>
+                </div>
+                
             </div>
         </div>
     </div>
