@@ -390,7 +390,7 @@ class Db {
         if (!is_array(current($data))) {
             $data = array(0 => $data);
         }
-        $fields = $select === '' ? array_keys(current($data)) : array_values($data);
+        $fields = $select === '' ? array_keys(current($data)) : array_values(current($data));
         $queryField = sprintf(' (`%s`)', implode('`,`', $fields));
         if ($select === '') {
             foreach ($data as $insert) {
@@ -401,7 +401,7 @@ class Db {
             }
             $querySet = ' VALUES ' . implode(', ', $set);
         } else {
-            $querySet = $select;
+            $querySet = ' ' . $select;
         }
         $queryFrom = $this->parseFrom();
         $sql = 'INSERT INTO ' . $queryFrom . $queryField . $querySet;
@@ -444,14 +444,14 @@ class Db {
         $queryJoin = $this->parseJoin();
         $queryFrom = $this->parseFrom();
         $queryWhere = $this->parseWhere();
-        $set = ' SET ';
-        if ($queryJoin === '') {
+        $set = ' SET';
+        if ('' === $queryJoin) {
             foreach ($data as $key => $value) {
-                $set .= sprintf("`%s` = '%s'", $key, $value);
+                $set .= sprintf(" `%s` = '%s',", $key, $value);
             }
         } else {
             foreach ($data as $key => $value) {
-                $set .= sprintf("`%s`.`%s`='%s'", $this->_table, $key, $value);
+                $set .= sprintf(" `%s`.`%s`='%s',", $this->_table, $key, $value);
             }
         }
         $querySet = substr($set, 0, -1);
