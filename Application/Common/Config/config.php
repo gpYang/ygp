@@ -49,7 +49,6 @@ return array(
         'StaticFile'
     ),
     'ext' => array(
-        'php' => '.php',
         'html' => '.phtml',
         'log' => '.log',
     ),

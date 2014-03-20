@@ -55,7 +55,7 @@ class Loader {
         spl_autoload_register(array($this, 'autoload'));
         foreach ($loader as $class) {
             if (!$this->autoload($class)) {
-                thrower('找不到类' . $class);
+                thrower('缺少系统类' . $class);
             }
         }
     }
@@ -115,7 +115,7 @@ class Loader {
      * 
      * @return array
      */
-    public static function getIsLoad() {
+    public function getIsLoad() {
         return $this->_isLoad;
     }
 

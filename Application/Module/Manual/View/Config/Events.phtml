@@ -6,12 +6,13 @@
             <h2>Common/Config/events.php</h2>
             <div>
                 <div class="code">
-                    'route' => array(),<span class="note">//内置方法1,根据路由配置等匹配路由,如果有模块事务配置,加载模块事务配置</span><br>
-                    'match' => array(),<span class="note">//内置方法2,匹配控制器,如果控制器无指定action,跳到404页面</span><br>
-                    'bootstrap' => array(),<span class="note">//内置方法3,引导,加载视图</span><br>
-                    'finish' => array(),<span class="note">//内置方法4,完成,渲染视图</span><br>
+                    'init' => array(),<span class="note">//内置方法1,初始化router类和request类</span><br>
+                    'route' => array(),<span class="note">//内置方法2,根据路由配置等匹配路由,如果有模块事务配置,加载模块事务配置</span><br>
+                    'match' => array(),<span class="note">//内置方法3,匹配控制器,如果控制器无指定action,跳到404页面</span><br>
+                    'bootstrap' => array(),<span class="note">//内置方法4,引导,加载视图</span><br>
+                    'finish' => array(),<span class="note">//内置方法5,完成,渲染视图</span><br>
                 </div>
-                内置方法必须要实现,而且必须按内置方法1,2,3,4的顺序实现,如果按框架实现可用array($argument1, $argument2,...),如果需要重写,可用匿名函数实现,如<br>
+                如果使用框架核心类,则内置方法必须要实现,而且必须按内置方法1,2,3,4,5的顺序实现,如果按框架实现可用array($argument1, $argument2,...),如果需要重写,可用匿名函数实现,如<br>
                 <div class="code">
                     'route' => function() { <br>
                     <div class="in_array">
@@ -27,7 +28,7 @@
                     </div>
                     },<br>
                 </div>
-                匿名函数有唯一参数,System/Event类,类中可获取router类,loader类,匹配控制器
+                匿名函数有唯一参数,System/Event类,类中可获取router类,loader类,匹配控制器等
             </div>
         </div>
     </div>

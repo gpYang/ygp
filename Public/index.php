@@ -26,6 +26,8 @@ define('PATH_UPLOAD', PATH_PUBLIC . '/Upload');
 define('PATH_CACHE', PATH_PUBLIC . '/_cache');
 
 define('PHP_EXT', '.php');
+define('HTML_EXT', '.phtml');
+define('LOG_EXT', '.log');
 
 $handle = include PATH_APPLICATION . '/Handle' . PHP_EXT;
 

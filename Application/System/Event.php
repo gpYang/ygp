@@ -72,6 +72,14 @@ class Event {
     }
 
     /**
+     * 初始化
+     */
+    public function init() {
+        $this->request = new \System\Request(\System\Config::getConfigFromFile('request'));
+        $this->router = new \System\Router(config());
+    }
+
+    /**
      * 启动
      */
     public function run() {

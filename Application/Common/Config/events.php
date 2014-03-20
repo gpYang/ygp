@@ -7,9 +7,17 @@
  * @package Common.Config
  */
 return array(
+     function () {
+        if (config('debug/on')) {
+            set_error_handler(array('Library\Debug', 'errorAgent'));
+            Library\Debug::open(true);
+            Library\Debug::setTime('allRun');
+        }
+    },
     function() {
         date_default_timezone_set(config('timezone'));
     },
+    'init' => array(),
     'route' => array(),
     'match' => array(),
     function($e) {
