@@ -20,6 +20,15 @@ class StaticFile {
     public static $host = '';
 
     /**
+     * 设置host地址
+     * 
+     * @param string $host
+     */
+    public static function setHost($host) {
+        static::$host = $$host;
+    }
+
+    /**
      * 获取静态文件
      * 
      * @param string $dir 目录

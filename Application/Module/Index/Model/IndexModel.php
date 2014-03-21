@@ -11,9 +11,9 @@ use System\Model;
 
 class IndexModel extends Model {
 
-    public function __construct() {
-        parent::__construct('writer', 'reader');
-    }
+//    public function __construct() {
+//        parent::__construct('writer', 'reader');
+//    }
 
     function get() {
         return $this->from('a')->select();
