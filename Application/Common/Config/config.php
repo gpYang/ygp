@@ -48,23 +48,9 @@ return array(
     'helper' => array(
         'StaticFile'
     ),
-    'ext' => array(
-        'html' => '.phtml',
-        'log' => '.log',
-    ),
     'error_reporting' => E_ALL,
-    'app_key' => '',
-    'language' => 'zh_CN',
-//    'path' => array(
-//        'log' => PATH_PUBLIC . '/_log',
-//        'upload' => PATH_PUBLIC . '/Upload'
-//    ),
     'route_rule' => array(
-//        array(array('manual', '?controller', 'index'), 'manual/[:controller].html', array('[a-z]+', '[a-z]+')),
-//        array(array('?module', '?controller', '?action'), '[:module]-[:controller]-[:action].html', array('[a-z]+', '[a-z]+', '[a-z]+')),
-//        array(array('index', 'index', 'index'), 'user/[:name]/data/[:id]', array('\w+', '\d+')),
-//        array(array('index', 'index', 'index'), 'user/[:id]/data/123', array('\d+', '\w+', '\d+')),
     ),
-    'timezone' => 'PRC',
+//    'timezone' => 'PRC',
 //    'cache' => 'Memcache',
 );
