@@ -15,7 +15,7 @@ return array(
         }
     },
     function() {
-        date_default_timezone_set(config('timezone'));
+//        date_default_timezone_set(config('timezone'));
     },
     'init' => array(),
     'route' => array(),
