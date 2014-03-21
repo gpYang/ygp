@@ -203,9 +203,8 @@ class Router {
      * 404
      */
     public function notFound() {
-        echo 333333333333333;
-//        @ob_clean();
-//        include PATH_APPLICATION . '/View/Error/404' . HTML_EXT;
+        @ob_clean();
+        include PATH_APPLICATION . '/View/Error/404' . HTML_EXT;
         exit();
     }
 
