@@ -23,9 +23,6 @@ class Validator {
         if (isset($key)) {
             $this->setKey($key);
         }
-        if (empty(self::$dictionary) && ($language = config('language'))) {
-            self::setDictionary(\System\Config::getConfigFromFile($language));
-        }
     }
 
     public static function setDictionary(array $dictionary) {

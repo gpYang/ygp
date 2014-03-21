@@ -112,9 +112,6 @@ class Upload {
         $this->_canUploadType = $canUploadType;
         $this->_canUpload = $this->checkFile();
         if ($this->_canUpload) {
-            if (empty(self::$_rootDir)) {
-                self::$_rootDir = ($path = config('path/upload')) ? $path : PATH_UPLOAD;
-            }
             if (!($this->_dir = $this->getDir())) {
                 return '创建上传目录失败';
             }
@@ -134,7 +131,7 @@ class Upload {
                 $log['eventType'] = $eventType;
                 $description = $log['description'];
                 unset($log['description']);
-                logs($description, 'warn', $log);
+                $this->logToFile($description, 'warn', $log);
             }
         }
     }
@@ -316,6 +313,17 @@ class Upload {
         }
         $this->_log[] = $log;
         return end($this->_log);
+    }
+    
+    /**
+     * 记录到文件,便于迁移
+     * 
+     * @param type $description
+     * @param type $logLevel
+     * @param type $logs
+     */
+    private function logToFile($description, $logLevel, $logs) {
+        logs($description, $logLevel, $logs);
     }
 
     /**

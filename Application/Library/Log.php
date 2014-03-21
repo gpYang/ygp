@@ -35,16 +35,7 @@ class Log {
     const INFO = 'info';
     const DEBUG = 'debug';
 
-    /**
-     * 构造函数
-     */
-    public function __construct() {
-        if (empty(self::$_logPath)) {
-            self::setLogPath(($path = config('path/log')) ? $path : PATH_LOG);
-        }
-        $this->_filename = date('Y-m-d', time()) . LOG_EXT;
-    }
-
+    
     /**
      * 设置日志目录
      * 
@@ -52,6 +43,13 @@ class Log {
      */
     public static function setLogPath($path) {
         self::$_logPath = $path;
+    }
+    
+    /**
+     * 构造函数
+     */
+    public function __construct() {
+        $this->_filename = date('Y-m-d', time()) . LOG_EXT;
     }
 
     /**

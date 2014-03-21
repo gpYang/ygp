@@ -20,12 +20,8 @@ return array(
     'init' => array(),
     'route' => array(),
     'match' => array(),
-    function($e) {
-//        $e->getMatchController()->view(null, 'header', 'header', true);
-    },
     'bootstrap' => array(),
     function($e) {
-//        $e->getMatchController()->view(null, 'footer', 'footer', true);
         if (config('debug/on')) {
             $e->getMatchController()->view(null, config('debug/debug-path'), config('debug/debug-view'), true);
         }

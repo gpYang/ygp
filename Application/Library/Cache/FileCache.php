@@ -32,15 +32,6 @@ class FileCache implements CacheInterface {
     private static $_cachePath = '';
 
     /**
-     * 构造函数
-     */
-    public function __construct() {
-        if (!self::$_cachePath) {
-            self::setCachePath((($path = config('path/cache')) ? $path : PATH_CACHE), (($appkey = config('app_key')) ? $appkey : ''));
-        }
-    }
-
-    /**
      * 设置缓存路径
      * 
      * @param string $path

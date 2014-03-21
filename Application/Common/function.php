@@ -27,11 +27,11 @@ function config($config = null, $value = null) {
  * 抛出异常函数
  * 
  * @param string $string 异常信息
- * @throws \Library\Thrower
+ * @throws \System\Thrower
  */
 function thrower($string) {
     @ob_clean();
-    throw new \Library\Thrower($string);
+    throw new \System\Thrower($string);
 }
 
 /**
@@ -231,47 +231,6 @@ function page($itemCount, $page = 1, $pageItem = 20, $pageName = 'p', $style = 1
     $pager = new \Library\Pager($itemCount, $pageItem, $style);
     $pager->setUrl(url(\System\Request::getRequestUri(), array($pageName => '_page_')));
     return $pager->show($page);
-}
-
-/**
- * 构建url
- * @example url('www.baidu.com', 'a=1&b=2')
- * @example url('index/index/index', array('a' => 1, 'b' => 2))
- * 
- * @param string $url 网址或路由
- * @param string|array $query get数据
- * @return null|string
- */
-function url($url, $query = '') {
-    if (!empty($url)) {
-        $url = trim($url, '/');
-        if (!($scheme = config('scheme'))) {
-            $scheme = 'http';
-        }
-        if (\System\Router::isRoute($url)) {
-            $url = config('host_url') . '/' . $url;
-        } else {
-            if (false === strpos($url, $scheme)) {
-                $url = $scheme . '://' . $url;
-                if (!filter_var($url, FILTER_VALIDATE_URL)) {
-                    return null;
-                }
-            }
-        }
-        $hostQuery = array();
-        $host = parse_url($url);
-        if (is_string($query)) {
-            parse_str($query, $query);
-        }
-        if (isset($host['query'])) {
-            parse_str($host['query'], $hostQuery);
-            $url = $host['scheme'] . '://' . $host['host'] . (isset($host['path']) ? $host['path'] : '');
-        }
-        $lastQuery = array_merge($hostQuery, $query);
-
-        return $url . (!empty($lastQuery) ? '?' . http_build_query($lastQuery) : '');
-    }
-    return null;
 }
 
 /**

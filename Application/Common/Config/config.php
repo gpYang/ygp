@@ -13,7 +13,7 @@ return array(
         'default-action' => 'index',
     ),
     'memcache' => array(
-        'host' => '192.168.33.4',
+        'host' => 'localhost',
         'port' => '11211',
     ),
     'db' => array(
@@ -53,9 +53,7 @@ return array(
         'log' => '.log',
     ),
     'error_reporting' => E_ALL,
-    'app_key' => '123',
-    'host_url' => 'http://helloygp.me',
-    'scheme' => 'http',
+    'app_key' => '',
     'language' => 'zh_CN',
 //    'path' => array(
 //        'log' => PATH_PUBLIC . '/_log',

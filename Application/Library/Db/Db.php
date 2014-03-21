@@ -9,7 +9,7 @@
 
 namespace Library\Db;
 
-use Library\Debug;
+//use Library\Debug;
 
 /**
  * @package Library.Db
@@ -97,15 +97,21 @@ class Db {
     private $_writer = '';
 
     /**
+     * 设置db配置
+     * 
+     * @param array $config
+     */
+    public static function setDbConfig($config) {
+        static::$_dbConfigs = $config;
+    }
+
+    /**
      * 构造 设置是否自动切换主从库
      * 
      * @param string $writer 主库名
      * @param string $reader 从库名
      */
     public function __construct($writer, $reader) {
-        if (empty(static::$_dbConfigs)) {
-            static::$_dbConfigs = config('db');
-        }
         $this->_defaultScheme = $this->_writer = $writer;
         $this->_reader = $reader;
         if ($this->_reader == $this->_writer) {
@@ -122,7 +128,7 @@ class Db {
     public function setScheme($key) {
         if (!isset(static::$_scheme[$key])) {
             if (!isset(static::$_dbConfigs[$key])) {
-                $this->throwError(sprintf('无法找到%s对应的数据库配置', $key));
+                $this->throwError(sprintf('无法找到[%s]对应的数据库配置', $key));
             }
             $driver = '\Library\Db\Driver\\' . static::$_dbConfigs[$key]['driver'];
             static::$_scheme[$key] = new $driver(static::$_dbConfigs[$key]);
@@ -133,7 +139,7 @@ class Db {
     }
 
     /**
-     * 获取sql命中中涉及的表
+     * 获取sql命令中涉及的表
      * 
      * @return type
      */
@@ -287,7 +293,6 @@ class Db {
         $queryWhere = $this->parseWhere();
         $queryGroup = $this->parseGroup();
         $queryHaving = $this->parseWhere('_having');
-        $table = is_array($this->_from) ? current($this->_from) : $this->_from;
         if (!empty($queryJoin)) {
             $field = ('`' . (is_array($this->_from) ? key($this->_from) : $this->_from) . '`.') . $field;
         }
@@ -553,11 +558,11 @@ class Db {
         }
         $sql = $this->replacePre($sql);
         $this->_lastSql = $sql;
-        $isDebug = Debug::check();
-        $isDebug && Debug::setSql($sql);
+//        $isDebug = Debug::check();
+//        $isDebug && Debug::setSql($sql);
         $rs = $this->_adapter->query($sql);
         $this->setError();
-        $isDebug && Debug::getTime();
+//        $isDebug && Debug::getTime();
         if (true === $toArray) {
             $rs = $this->toArray($rs);
         }
