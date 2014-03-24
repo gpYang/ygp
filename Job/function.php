@@ -51,8 +51,3 @@ function autoload($class) {
     }
     return $RETURN(false, '无法找到对应类名->' . $class);
 }
-
-function thrower($string) {
-    global $RETURN;
-    return $RETURN(false, $string);
-}

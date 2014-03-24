@@ -12,10 +12,10 @@ define('PATH_MODULE', PATH_APPLICATION . '/Module');
 
 define('PATH_MODEL', PATH_JOB . '/Model');
 
-$s = microtime(true);
 $RETURN = 'json';
 global $RETURN;
 
+include PATH_APPLICATION . '/Common/function.php';
 include PATH_JOB . '/function.php';
 
 spl_autoload_register('autoload');
@@ -52,5 +52,4 @@ $call = call_user_func_array(array($app, $method), $_GET);
 if (!is_array($call)) {
     return $RETURN(false, '返回参数有误');
 }
-echo number_format((microtime(true) - $s) * 1000, 3);
 return call_user_func_array($RETURN, $call);

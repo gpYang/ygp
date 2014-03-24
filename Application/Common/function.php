@@ -30,8 +30,13 @@ function config($config = null, $value = null) {
  * @throws \System\Thrower
  */
 function thrower($string) {
-    @ob_clean();
-    throw new \System\Thrower($string);
+    global $RETURN;
+    if ($RETURN) {
+        return $RETURN(false, $string);
+    } else {
+        @ob_clean();
+        throw new \System\Thrower($string);
+    }
 }
 
 /**
@@ -163,7 +168,7 @@ function logs($description, $logLevel = 'info', $logs = array()) {
         $log = singleton('Library-Log', new \Library\Log());
     }
     if (null === $ref) {
-        $ref = singleton('Library-Log', new ReflectionClass($log));
+        $ref = singleton('ReflectionClass-Log', new ReflectionClass($log));
     }
     $logLevels = $ref->getConstants();
     if (!in_array($logLevel, $logLevels)) {
