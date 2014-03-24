@@ -59,7 +59,7 @@ class Db {
     /**
      * @var array 数据库配置
      */
-    private static $_dbConfigs = array();
+    public static $_dbConfigs = array();
 
     /**
      * @var boolean 是否自动切换主从库

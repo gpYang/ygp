@@ -38,6 +38,10 @@ abstract class Model {
      * @param string $reader 从库
      */
     protected function __construct($writer = 'writer', $reader = 'reader') {
+        if (!Db::$_dbConfigs) {
+            $dbConfig = \System\Config::getConfig('db');
+            Db::setDbConfig($dbConfig);
+        }
         $this->db = new Db($writer, $reader);
     }
 

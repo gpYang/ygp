@@ -51,6 +51,4 @@ return array(
     'error_reporting' => E_ALL,
     'route_rule' => array(
     ),
-//    'timezone' => 'PRC',
-//    'cache' => 'Memcache',
 );
