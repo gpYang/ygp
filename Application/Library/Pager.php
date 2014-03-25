@@ -109,7 +109,7 @@ class Pager {
                 $output .= '<span class="ipt-combin">到<input id="to-page" type="text" class="' . self::$style['input'] . '" size="2" value="' . $currentPage . '" />页' . "\n";
                 $output .= '<input type="button" class="' . self::$style['goto'] . '" value="" onclick="window.location.href=\'' . $url . '\'.replace(\'' . $pageSize . '\',document.getElementById(\'to-page\').value)"/></span>' . "\n";
                 $output .= '</div>';
-            case 2:
+            default :
                 break;
         }
         return $output;

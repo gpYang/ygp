@@ -35,7 +35,6 @@ class Log {
     const INFO = 'info';
     const DEBUG = 'debug';
 
-    
     /**
      * 设置日志目录
      * 
@@ -44,7 +43,7 @@ class Log {
     public static function setLogPath($path) {
         self::$_logPath = $path;
     }
-    
+
     /**
      * 构造函数
      */
