@@ -7,7 +7,7 @@
  * @package Library.Valid
  */
 
-namespace Library;
+namespace Library\Valid;
 
 /**
  * @package Library.Valid
@@ -19,28 +19,52 @@ class Validator {
     private $messages = array();
     private static $dictionary = array();
 
+    /**
+     * 设置错误信息字典
+     * 
+     * @param array $dictionary
+     */
+    public static function setDictionary(array $dictionary) {
+        self::$dictionary = $dictionary;
+    }
+
     public function __construct($key = null) {
         if (isset($key)) {
             $this->setKey($key);
         }
     }
 
-    public static function setDictionary(array $dictionary) {
-        self::$dictionary = $dictionary;
-    }
-
+    /**
+     * 设置验证名
+     * 
+     * @param type $key
+     */
     public function setKey($key) {
         $this->key = $key;
     }
 
+    /**
+     * 清除所有错误信息
+     */
     public function clearMessage() {
         $this->messages = array();
     }
 
-    public function getMessage() {
+    /**
+     * 获取所有错误信息
+     * 
+     * @return array
+     */
+    public function getMessages() {
         return $this->messages;
     }
 
+    /**
+     * 保存错误信息
+     * 
+     * @param string $message 错误信息
+     * @param string $value 错误数据
+     */
     public function setMessage(string $message, $value = '') {
         if (0 === strpos($message, '@')) {
             $message = substr($message, 1);
@@ -50,7 +74,7 @@ class Validator {
                 $message = $this->validPrefix . '/' . $message;
             }
         }
-        $this->messages[] = str_replace(array("%key%", "%value%"), array($this->key, $value), $message);
+        $this->messages[$this->key] = str_replace(array("%key%", "%value%"), array($this->key, $value), $message);
     }
 
     /**
@@ -111,8 +135,6 @@ class Validator {
 
     /**
      * 是否在数值范围
-     * @param number $value 
-     * @param array $condition 
      */
     public function between($value, array $condition, $message = '') {
         if (($value >= $condition[0]) && ($value <= $condition[1])) {
@@ -129,7 +151,7 @@ class Validator {
         if (is_numeric($value)) {
             return true;
         }
-        $this->setMessage(empty($message) ? '@notDigits' : $message);
+        $this->setMessage(empty($message) ? '@notDigits' : $message, $value);
         return false;
     }
 
@@ -140,7 +162,7 @@ class Validator {
         if (is_numeric($value) && intval($value) == $value) {
             return true;
         }
-        $this->setMessage(empty($message) ? '@int' : $message);
+        $this->setMessage(empty($message) ? '@int' : $message, $value);
         return false;
     }
 
@@ -152,15 +174,8 @@ class Validator {
         if (preg_match($pattern, $value)) {
             return true;
         }
-        $this->setMessage(empty($message) ? '@zh_cn' : $message);
+        $this->setMessage(empty($message) ? '@zh_cn' : $message, $value);
         return false;
-    }
-
-    /**
-     * 是否是繁体中文（香港）
-     */
-    public function zh_hk() {
-        return true;
     }
 
     /**
@@ -171,7 +186,7 @@ class Validator {
         if (preg_match($pattern, $value)) {
             return true;
         }
-        $this->setMessage(empty($message) ? '@float' : $message);
+        $this->setMessage(empty($message) ? '@float' : $message, $value);
         return false;
     }
 
@@ -183,7 +198,7 @@ class Validator {
         if (preg_match($pattern, $value)) {
             return true;
         }
-        $this->setMessage(empty($message) ? '@mobile' : $message);
+        $this->setMessage(empty($message) ? '@mobile' : $message, $value);
         return false;
     }
 
@@ -194,7 +209,7 @@ class Validator {
         if (empty($value) && $value !== '0') {
             return true;
         }
-        $this->setMessage(empty($message) ? '@isEmpty' : $message);
+        $this->setMessage(empty($message) ? '@isEmpty' : $message, $value);
         return false;
     }
 
@@ -205,7 +220,7 @@ class Validator {
         if (!empty($value) || $value === '0') {
             return true;
         }
-        $this->setMessage(empty($message) ? '@notEmpty' : $message);
+        $this->setMessage(empty($message) ? '@notEmpty' : $message, $value);
         return false;
     }
 
@@ -217,7 +232,7 @@ class Validator {
         if (preg_match($pattern, $value)) {
             return true;
         }
-        $this->setMessage(empty($message) ? '@ip' : $message);
+        $this->setMessage(empty($message) ? '@ip' : $message, $value);
         return false;
     }
 
@@ -259,7 +274,7 @@ class Validator {
         if (IDCard::isCard($value)) {
             return true;
         }
-        $this->setMessage(empty($message) ? '@id' : $message);
+        $this->setMessage(empty($message) ? '@id' : $message, $value);
         return false;
     }
 
@@ -271,60 +286,99 @@ class Validator {
         if (preg_match($pattern, $value)) {
             return true;
         }
-        $this->setMessage(empty($message) ? '@postCode' : $msg);
+        $this->setMessage(empty($message) ? '@postCode' : $message, $value);
         return false;
     }
 
     /**
      * 验证邮箱
      */
-    public function email() {
-        $validator = new ZV\EmailAddress();
-        return call_user_func_array(array($this, 'ZendValid'), array_merge(array($validator), func_get_args()));
-    }
-
-    /**
-     * 验证日期 诸如2012-12-22
-     */
-    public function date($value) {
-        if ($value === '0000-00-00') {
-            return true;
+    public function email($value, $message = '') {
+        $result = true;
+        //首先判断@只能有1个,且邮箱名不能超过64位,域名不能超过255位
+        if (!preg_match("/^[^@]{1,64}@[^@]{1,255}$/", $value)) {
+            $result = false;
         }
-        $validator = new ZV\Date(array('format' => 'Y-m-d'));
-        return call_user_func_array(array($this, 'ZendValid'), array_merge(array($validator), func_get_args()));
+        $email_array = explode('@', $value);
+        $local_array = explode('.', $email_array[0]);
+        foreach ($local_array as $local) {
+            if (!preg_match("/^(([A-Za-z0-9!#$%&'*+\/=?^_`{|}~-][A-Za-z0-9!#$%&'*+\/=?^_`{|}~\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$/", $local)) {
+                $result = false;
+            }
+        }
+
+        //判断域名是否ip
+        if (!preg_match('/^\[?[0-9\.]+\]?$/', $email_array[1])) {
+            $domain_array = explode('.', $email_array[1]);
+            //有无小数点
+            if (count($domain_array) < 2) {
+                $result = false;
+            }
+            foreach ($domain_array as $domain) {
+                if (!preg_match('/^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$/', $domain)) {
+                    $result = false;
+                }
+            }
+        }
+        if (!$result) {
+            $this->setMessage(empty($message) ? '@email' : $message, $value);
+        }
+        return $result;
     }
 
     /**
-     * 验证时间 诸如2012-12-22 12:12:12
-     * @param type $value
+     * 验证时间格式 诸如2012-12-22
      */
-    public function datetime($value) {
-        $validator = new ZV\Date(array('format' => 'Y-m-d H:i:s'));
-        return call_user_func_array(array($this, 'ZendValid'), array_merge(array($validator), func_get_args()));
+    public function datetime($value, $format = 'Y-m-d', $message = '') {
+        $result = true;
+        $strArr = explode('-', $value);
+        if (empty($strArr)) {
+            $result = false;
+        }
+        foreach ($strArr as $val) {
+            if (strlen($val) < 2) {
+                $val = '0' . $val;
+            }
+            $newArr[] = $val;
+        }
+        $str = implode('-', $newArr);
+        $unixTime = strtotime($str);
+        $checkDate = date($format, $unixTime);
+        if ($checkDate != $str) {
+            $result = false;
+        }
+        if (!$result) {
+            $this->setMessage(empty($message) ? '@date' : $message, $value);
+        }
+        return $result;
     }
 
     /**
      * 是否为信用卡
      */
-    public function creditCard($value) {
-        $validator = new ZV\creditCard();
-        return call_user_func_array(array($this, 'ZendValid'), array_merge(array($validator), func_get_args()));
-    }
-
-    /**
-     * 是否为16进制
-     */
-    public function hex($value) {
-        $validator = new ZV\Hex();
-        return call_user_func_array(array($this, 'ZendValid'), array_merge(array($validator), func_get_args()));
-    }
-
-    /**
-     * 验证主机名
-     */
-    public function hostname($value) {
-        $validator = new ZV\HostName();
-        return call_user_func_array(array($this, 'ZendValid'), array_merge(array($validator), func_get_args()));
+    public function creditCard($value, $message = '') {
+        $result = true;
+        $cardnumber = preg_replace('/\D|\s/', '', $value);
+        $cardlength = strlen($cardnumber);
+        if ($cardlength != 0) {
+            $parity = $cardlength % 2;
+            $sum = 0;
+            for ($i = 0; $i < $cardlength; $i++) {
+                $digit = $cardnumber [$i];
+                if ($i % 2 == $parity)
+                    $digit = $digit * 2;
+                if ($digit > 9)
+                    $digit = $digit - 9;
+                $sum = $sum + $digit;
+            }
+            $result = ($sum % 10 == 0);
+        } else {
+            $result = false;
+        }
+        if (!$result) {
+            $this->setMessage(empty($message) ? '@creditCard' : $value);
+        }
+        return $result;
     }
 
 }

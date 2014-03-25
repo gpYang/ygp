@@ -3,11 +3,11 @@
 /**
  * 身份证处理类
  * 
- * @author yangguipeng<hi121073215@gmail.com>
+ * @author unkown
  * @package Library.Valid
  */
 
-namespace Library;
+namespace Library\Valid;
 
 /**
  * @package Library.Valid
