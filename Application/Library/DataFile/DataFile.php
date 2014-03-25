@@ -56,7 +56,7 @@ class DataFile {
      * @param null|int $sheet 操作的模板块,null为现打开的块
      * @return array
      */
-    public static function Import($path, $filename, $sheet = null) {
+    public static function Import($path, $filename) {
         self::init($filename);
         if (self::$class !== null) {
             return call_user_method_array(__FUNCTION__, self::$class, func_get_args());

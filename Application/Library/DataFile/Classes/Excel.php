@@ -30,21 +30,16 @@ class Excel implements DataFileInterface {
      * 
      * @param string $path 导入文件路径
      * @param string $filename 导入文件名
-     * @param null|int $sheet 操作的模板块,null为现打开的块
      * @return array
      */
-    public function Import($path, $filename, $sheet = null) {
-        $objReader = \PHPExcel_IOFactory::createReader('Excel5');
-        $objPHPExcel = $objReader->load($path . '/' . $filename);
-        $objWorksheet = $sheet === null ? $objPHPExcel->getActiveSheet() : $objPHPExcel->getSheet(intval($sheet));
-        $this->setRowAndColumn($objWorksheet);
-        $data = array();
-        for ($row = 1; $row <= $this->row; $row++) {
-            for ($col = 0; $col < $this->column; $col++) {
-                $data[$row][$col] = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-            }
+    public function Import($path, $filename) {
+        $excel = \PHPExcel_IOFactory::load($path . '/' . $filename);
+        $all = array();
+        for ($i = 0; $i < $excel->getSheetCount(); ++$i) {
+            $excel->setActiveSheetIndex($i);
+            $all[$i] = $excel->getActiveSheet()->toArray();
         }
-        return $data;
+        return $all;
     }
 
     /**

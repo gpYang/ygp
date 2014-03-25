@@ -32,10 +32,9 @@ class Csv implements DataFileInterface {
      * 
      * @param string $path 导入文件路径
      * @param string $filename 导入文件名
-     * @param null|int $sheet 操作的模板块,null为现打开的块
      * @return array
      */
-    public function Import($path, $filename, $sheet = null) {
+    public function Import($path, $filename) {
         $row = 1; //第一行开始  
         if (($handle = fopen($path . '/' . $filename, "r")) !== false) {
             while (($dataSrc = fgetcsv($handle)) !== false) {

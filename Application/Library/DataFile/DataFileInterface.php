@@ -14,7 +14,7 @@ namespace Library\DataFile;
  */
 interface DataFileInterface {
 
-    public function Import($path, $filename, $sheet);
+    public function Import($path, $filename);
 
     public function Export($data, $filename);
 }
