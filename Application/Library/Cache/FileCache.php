@@ -149,13 +149,29 @@ class FileCache implements CacheInterface {
      * @return boolean
      */
     public function flush() {
-        if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
-            $str = "rmdir /s/q " . str_replace('/', '\\', self::$_cachePath);
-        } else {
-            $str = "rm -Rf " . self::$_cachePath;
+        return $this->deldir(self::$_cachePath);
+    }
+
+    /**
+     * 删除目录下所有文件和文件夹
+     * 
+     * @param string $dir 目录
+     * @return boolean
+     */
+    private function deldir($dir) {
+        $dh = opendir($dir);
+        while ($file = readdir($dh)) {
+            if ($file != "." && $file != "..") {
+                $fullpath = $dir . "/" . $file;
+                if (!is_dir($fullpath)) {
+                    unlink($fullpath);
+                } else {
+                    $this->deldir($fullpath);
+                }
+            }
         }
-        system($str);
-        return true;
+        closedir($dh);
+        return rmdir($dir);
     }
 
     /**
