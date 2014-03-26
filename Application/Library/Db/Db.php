@@ -608,7 +608,11 @@ class Db {
      * @param string $errorString 错误信息
      */
     public function throwError($errorString) {
-        thrower($errorString);
+        if (function_exists('thrower')) {
+            thrower($errorString);
+        } else {
+            throw new \Exception($errorString);
+        }
     }
 
     /**
