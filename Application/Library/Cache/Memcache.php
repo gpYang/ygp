@@ -24,7 +24,7 @@ class Memcache implements CacheInterface {
     /**
      * @var array 缓存配置
      */
-    private $_memcacheConfig = array();
+    private static $_memcacheConfig = array();
 
     /**
      * @var string 存数据缓存的键
@@ -42,27 +42,12 @@ class Memcache implements CacheInterface {
     private static $_flag = 0;
 
     /**
-     * 构造函数
-     */
-    public function __construct() {
-        if (!isset(self::$_appkey)) {
-            self::setAppkey(($appkey = config('app_key')) ? $appkey : '');
-        }
-        if (!self::$_memcacheHandler) {
-            self::$_memcacheHandler = $this->connect();
-        }
-    }
-
-    public function __destruct() {
-        $this->close();
-    }
-
-    /**
      * 设置系统appkey
      * 
      * @param string $appkey
      */
-    public static function setAppkey($appkey) {
+    public static function setConfig($config, $appkey) {
+        self::$_memcacheConfig = $config;
         self::$_appkey = $appkey;
         self::$_listNameTemplate = sprintf(self::$_listNameTemplate, $appkey);
     }
@@ -77,6 +62,18 @@ class Memcache implements CacheInterface {
     }
 
     /**
+     * 构造函数
+     */
+    public function __construct() {
+        if (empty(self::$_memcacheConfig)) {
+            $this->throwError('无法找到memcache配置');
+        }
+        if (!self::$_memcacheHandler) {
+            self::$_memcacheHandler = $this->connect();
+        }
+    }
+
+    /**
      * 连接memcache
      * 
      * @return \Memcache
@@ -86,10 +83,8 @@ class Memcache implements CacheInterface {
             $this->throwError('无法加载memcahce扩展');
         }
         $handle = new \Memcache;
-        empty($this->_memcacheConfig) && $this->_memcacheConfig = config('memcache');
-
-        $handle->connect($this->_memcacheConfig['host'], $this->_memcacheConfig['port']);
-        if (!$handle->getServerStatus($this->_memcacheConfig['host'], $this->_memcacheConfig['port'])) {
+        $handle->connect(self::$_memcacheConfig['host'], self::$_memcacheConfig['port']);
+        if (!$handle->getServerStatus(self::$_memcacheConfig['host'], self::$_memcacheConfig['port'])) {
             $this->throwError('memcache服务器无法连接');
         }
         return $handle;
@@ -387,7 +382,11 @@ class Memcache implements CacheInterface {
      * @param string $errorString 错误信息
      */
     public function throwError($errorString) {
-        thrower($errorString);
+        if (function_exists('thrower')) {
+            thrower($errorString);
+        } else {
+            throw new \Exception($errorString);
+        }
     }
 
 }
