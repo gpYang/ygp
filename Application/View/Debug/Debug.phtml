@@ -1,0 +1,76 @@
+<style>
+    #zm_debug_wrapper{
+        margin: 0;
+        font-family: 'Microsoft Yahei', '微软雅黑', '雅黑', Verdana, arial, sans-serif, '宋体';
+        font-size:11px;	text-align: left;
+        border: 1px solid #CCC;
+        padding: 6px 18px;
+    }
+    #zm_debug_title {
+        display: none;
+    }
+    #zm_debug_wrapper p{
+        margin: 12px 0;
+    }
+    #zm_debug_wrapper strong{
+        font-weight: bold;
+    }
+    #zm_debug_wrapper ol{
+        list-style-type: decimal;
+        list-style-image: none;
+        list-style-position: outside;
+        margin: 16px 0;
+        padding-left: 0;
+    }
+    #zm_debug_wrapper ol li{
+        list-style-type: decimal;
+        list-style-image: none;
+        list-style-position: outside;
+        margin-left: 28px;
+    }
+</style>
+
+<div id="zm_debug_wrapper" class="">
+    <span id="zm_debug_title">Debug</span>
+
+    <p>
+        <strong>Memory Usage</strong>: <?php echo number_format(memory_get_usage(false) / 1024, 2); ?>KB;&nbsp;&nbsp;
+        <strong>Memory Peak Usage</strong>: <?php echo number_format(memory_get_peak_usage(false) / 1024, 2); ?>KB;&nbsp;&nbsp;
+        <strong>Memory Allocated</strong>: <?php echo number_format(memory_get_usage(true) / 1024, 2); ?>KB;&nbsp;&nbsp;
+        <strong>Memory Peak Allocated</strong>: <?php echo number_format(memory_get_peak_usage(true) / 1024, 2); ?>KB;&nbsp;&nbsp;
+    </p>
+    <?php
+    Library\Debug::getFile('/\S*vendor\S*/', false);
+    Library\Debug::getTime('allRun');
+    if (!empty(Library\Debug::$_timeLog)) {
+        ?>
+        <p><strong>Timeline</strong></p>
+        <?php
+        Library\Debug::show('_timeLog');
+    }
+
+    // Error
+    if (!empty(Library\Debug::$_errorInfo)) {
+        ?>
+        <p><strong>Error</strong></p>
+        <?php
+        Library\Debug::show('_errorInfo');
+    }
+
+    // SQL
+    if (!empty(Library\Debug::$_sql)) {
+        ?>
+        <p><strong>SQL (<?php Library\Debug::show('_sqlLog'); ?>MS)</strong></p>
+        <?php
+        Library\Debug::show('_sql');
+    }
+
+    // Included Files
+    if (!empty(Library\Debug::$_incFile)) {
+        ?>
+        <p><strong>Included Files(<?php echo Library\Debug::$_fileCount; ?>)</strong></p>
+        <?php
+        Library\Debug::show('_incFile');
+    }
+    ?>
+</div>
