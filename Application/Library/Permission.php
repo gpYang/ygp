@@ -44,6 +44,13 @@ class Permission {
     private $_isAuth = false;
 
     /**
+     * 是否能直接对所有模块配置
+     * 
+     * @var boolean
+     */
+    private $_canSetAll = true;
+
+    /**
      * 禁止进入方法
      * 
      * @var object|null
@@ -105,7 +112,7 @@ class Permission {
     public function setAuth($isAuth) {
         $this->_isAuth = $isAuth;
     }
-    
+
     /**
      * 开启/关闭验证
      * 
@@ -142,24 +149,19 @@ class Permission {
      * @return boolean
      */
     public function check($route, $type, $value) {
-        if (!$this->_isAuth)
+        if (!$this->_isAuth || $this->checkAllow(implode('/', $route), $type, $value))
             return true;
-        $changeTo = array_fill(0, $this->_routeDeep, self::ALL);
-        $maybes = array(implode('/', $changeTo), implode('/', $route));
-        for ($deep = 0; $deep < $this->_routeDeep; $deep++) {
-            $cloneRoute = $route;
-            $cloneChangeTo = $changeTo;
-            $cloneRoute[$deep] = $changeTo[$deep];
-            $cloneChangeTo[$deep] = $route[$deep];
-            $maybes[] = implode('/', $cloneRoute);
-            $maybes[] = implode('/', $cloneChangeTo);
-        }
-        foreach ($maybes as $maybe) {
-            if (isset($this->_rule[$maybe][self::ALL])) {
+        if ($this->_canSetAll) {
+            $changeTo = array_fill(0, $this->_routeDeep, self::ALL);
+            if ($this->checkAllow(implode('/', $changeTo), $type, $value)) {
                 return true;
             }
-            if (isset($this->_rule[$maybe][$type])) {
-                if ($this->checkCondition($this->_rule[$maybe][$type], $value)) {
+            for ($deep = 0; $deep < $this->_routeDeep; $deep++) {
+                $cloneRoute = $route;
+                $cloneChangeTo = $changeTo;
+                $cloneRoute[$deep] = $changeTo[$deep];
+                $cloneChangeTo[$deep] = $route[$deep];
+                if ($this->checkAllow(implode('/', $cloneRoute), $type, $value) || $this->checkAllow(implode('/', $cloneChangeTo), $type, $value)) {
                     return true;
                 }
             }
@@ -169,7 +171,27 @@ class Permission {
         }
         return false;
     }
-    
+
+    /**
+     * 验证是否允许进入
+     * 
+     * @param string $implodeRoute 路由组成
+     * @param string $type 类型
+     * @param mixed $value 校验值
+     * @return boolean
+     */
+    private function checkAllow($implodeRoute, $type, $value) {
+        if (isset($this->_rule[$implodeRoute][self::ALL])) {
+            return true;
+        }
+        if (isset($this->_rule[$implodeRoute][$type])) {
+            if ($this->checkCondition($this->_rule[$implodeRoute][$type], $value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * 校验条件
      * 
