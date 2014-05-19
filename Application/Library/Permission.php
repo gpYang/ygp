@@ -132,6 +132,24 @@ class Permission {
     }
 
     /**
+     * 设置是否能直接对所有模块配置
+     * 
+     * @param boolean $canSetAll
+     */
+    public function setCanSetAll($canSetAll) {
+        $this->_canSetAll = $canSetAll;
+    }
+
+    /**
+     * 获取是否能直接对所有模块配置
+     * 
+     * @return boolean
+     */
+    public function getCanSetAll() {
+        return $this->_canSetAll;
+    }
+
+    /**
      * 禁止进入方法
      * 
      * @param object $function
