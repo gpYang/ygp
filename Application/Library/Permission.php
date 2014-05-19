@@ -167,6 +167,7 @@ class Permission {
      * @return boolean
      */
     public function check($route, $type, $value) {
+        $route = array_slice($route, count($route) - $this->_routeDeep);
         if (!$this->_isAuth || $this->checkAllow(implode('/', $route), $type, $value))
             return true;
         if ($this->_canSetAll) {
